@@ -6,4 +6,18 @@
     <color name="accent_purple">#7C4DFF</color>  <!-- Le violet du bouton -->
     <color name="text_white">#FFFFFF</color>
     <color name="text_gray">#BDBDBD</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="bg_dark">#0E0E14</color>
+    <color name="card_dark">#171723</color>
+    <color name="card_stroke">#2B2B3A</color>
+
+    <color name="primary_violet">#5B2EEA</color>
+
+    <color name="text_secondary">#B9B9C9</color>
+
+    <!-- AJOUTER CES 2 COULEURS -->
+    <color name="field_bg_dark">#1E1E2B</color>
+    <color name="hint_gray">#9A9AAF</color>
 </resources>
