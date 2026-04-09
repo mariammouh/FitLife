@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Active/selected item (Strong purple) -->
+    <item android:color="#9B6FF9" android:state_checked="true" />
+    <!-- Inactive item (Light/Grayish purple) -->
+    <item android:color="#BFA0FF" />
+</selector>
