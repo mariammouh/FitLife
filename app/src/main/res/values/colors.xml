@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_black">#000000</color>
+    <color name="surface_dark">#121212</color>
+    <color name="primary_purple">#BB86FC</color> <!-- Le violet clair des cards -->
+    <color name="accent_purple">#7C4DFF</color>  <!-- Le violet du bouton -->
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_gray">#BDBDBD</color>
+</resources>
