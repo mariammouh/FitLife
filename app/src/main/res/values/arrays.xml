@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="activity_types">
+        <item>cardio</item>
+        <item>yoga</item>
+        <item>hiit</item>
+        <item>strength</item>
+        <item>walking</item>
+        <item>cycling</item>
+    </string-array>
+
+    <string-array name="intensity_levels">
+        <item>low</item>
+        <item>moderate</item>
+        <item>high</item>
+    </string-array>
+
+    <string-array name="mood_levels">
+        <item>neutral</item>
+        <item>good</item>
+        <item>great</item>
+        <item>tired</item>
+        <item>stressed</item>
+        <item>motivated</item>
+    </string-array>
+</resources>

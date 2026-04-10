@@ -2,9 +2,12 @@ package com.example.fitlife
 
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -17,22 +20,24 @@ interface ApiService {
         @Field("height") height: String,
         @Field("weight") weight: String
     ): Call<ResponseBody>
+
     @FormUrlEncoded
     @POST("ai_coach.php")
     fun getAiStrategy(@Field("email") email: String): Call<ResponseBody>
+
     @FormUrlEncoded
     @POST("login.php")
     fun loginUser(
         @Field("email") email: String,
         @Field("password") pass: String
-    ): Call<ResponseBody>
+    ): Call<ResponseBody> // Changed from Call<LoginResponse>
 
-    // جلب معلومات البروفايل
+    // Get profile information
     @FormUrlEncoded
     @POST("get_profile.php")
     fun getProfile(@Field("email") email: String): Call<ResponseBody>
 
-    // تحديث معلومات البروفايل
+    // Update profile information
     @FormUrlEncoded
     @POST("update_profile.php")
     fun updateProfile(
@@ -41,4 +46,19 @@ interface ApiService {
         @Field("age") age: String,
         @Field("goal") goal: String
     ): Call<ResponseBody>
+
+    @GET("get_user.php")
+    fun getUser(@Query("user_id") userId: Int): Call<UserResponse>
+
+    @GET("get_dashboard_stats.php")
+    fun getDashboardStats(@Query("user_id") userId: Int): Call<DashboardStatsResponse>
+
+    @GET("get_activities.php")
+    fun getActivities(@Query("user_id") userId: Int): Call<ActivityResponse>
+
+    @POST("update_user.php")
+    fun updateUser(@Body body: Map<String, String>): Call<UpdateUserResponse>
+
+    @POST("use_try.php")
+    fun useTry(@Body body: Map<String, String>): Call<UseTryResponse>
 }
