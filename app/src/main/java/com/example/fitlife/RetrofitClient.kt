@@ -10,9 +10,9 @@ object RetrofitClient {
     /** 
      * BASE_URL Configuration:
      * - Emulator: "http://10.0.2.2/fitlife/"
-     * - Physical Device: Replace with your PC's IPv4 address, e.g., "http://192.168.1.5/fitlife/"
+     * - Physical Device: Replace with your PC's IPv4 address, e.g., "http://192.168.0.102/fitlife/"
      */
-    private const val BASE_URL = "http://192.168.0.102/fitlife/"
+    const val BASE_URL = "http://192.168.0.102/fitlife/"
 
     private val gson = GsonBuilder()
         .setLenient()

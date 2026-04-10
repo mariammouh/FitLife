@@ -2,12 +2,7 @@ package com.example.fitlife
 
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiService {
 
@@ -30,14 +25,12 @@ interface ApiService {
     fun loginUser(
         @Field("email") email: String,
         @Field("password") pass: String
-    ): Call<ResponseBody> // Changed from Call<LoginResponse>
+    ): Call<ResponseBody>
 
-    // Get profile information
     @FormUrlEncoded
     @POST("get_profile.php")
     fun getProfile(@Field("email") email: String): Call<ResponseBody>
 
-    // Update profile information
     @FormUrlEncoded
     @POST("update_profile.php")
     fun updateProfile(
@@ -61,4 +54,28 @@ interface ApiService {
 
     @POST("use_try.php")
     fun useTry(@Body body: Map<String, String>): Call<UseTryResponse>
+
+    @FormUrlEncoded
+    @POST("save_activity.php")
+    fun saveActivity(
+        @Field("user_id") userId: Int,
+        @Field("name") name: String,
+        @Field("type") type: String,
+        @Field("duration") duration: String,
+        @Field("distance") distance: String,
+        @Field("calories") calories: String,
+        @Field("date") date: String,
+        @Field("start") start: String,
+        @Field("end") end: String,
+        @Field("location") location: String,
+        @Field("notes") notes: String,
+        @Field("intensity") intensity: String,
+        @Field("avg_heart") avgHeart: String,
+        @Field("max_heart") maxHeart: String,
+        @Field("sets") sets: String,
+        @Field("reps") reps: String,
+        @Field("weight") weight: String,
+        @Field("mood_before") moodBefore: String,
+        @Field("mood_after") moodAfter: String
+    ): Call<ResponseBody>
 }
