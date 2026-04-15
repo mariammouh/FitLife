@@ -57,14 +57,14 @@ class WorkoutActivity : AppCompatActivity() {
 
         val workoutName = intent.getStringExtra("WORKOUT_NAME") ?: "Yoga"
         Log.d("WORKOUT_DEBUG", "Starting WorkoutActivity for: $workoutName")
-        
+
         // Find and update the header/title
         val tvHeader = findViewById<TextView>(R.id.tvAvatarHeader)
         tvHeader.text = "Workout Instructor"
 
         val tvTitle = findViewById<TextView>(R.id.tvAvatarName)
         tvTitle.text = workoutName.uppercase()
-        
+
         // Update description for context
         val tvDesc = findViewById<TextView>(R.id.tvAvatarDesc)
         tvDesc.text = "Follow the movements of your $workoutName instructor."
@@ -124,7 +124,7 @@ class WorkoutActivity : AppCompatActivity() {
         // Aggressive Model-Side Correction matching AvatarActivity logic
         val correction = FloatArray(16)
         android.opengl.Matrix.setIdentityM(correction, 0)
-        
+
         // Match AvatarActivity's coordinate system and scale
         android.opengl.Matrix.translateM(correction, 0, 5.0f, -60.0f, -170.0f)
         android.opengl.Matrix.scaleM(correction, 0, 0.6f, 0.6f, 0.6f)

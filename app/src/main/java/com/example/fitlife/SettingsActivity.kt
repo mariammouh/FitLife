@@ -74,8 +74,16 @@ class SettingsActivity : AppCompatActivity() {
         val rowTime           = findViewById<RelativeLayout>(R.id.rowReminderTime)
         val rowMessage        = findViewById<RelativeLayout>(R.id.rowReminderMessage)
         val rowTestNotif      = findViewById<RelativeLayout>(R.id.rowTestNotif)
+        
+        val tvSectionSubscription = findViewById<TextView>(R.id.tvSectionSubscription)
+        val cardTries         = findViewById<CardView>(R.id.cardTries)
         val cardUpgrade       = findViewById<CardView>(R.id.cardUpgrade)
         val rowLogout         = findViewById<RelativeLayout>(R.id.rowLogout)
+
+        // Hydration Views
+        val switchHydration = findViewById<SwitchCompat>(R.id.switchHydration)
+        val rowHydrationInterval = findViewById<RelativeLayout>(R.id.rowHydrationInterval)
+        val tvHydrationInterval = findViewById<TextView>(R.id.tvHydrationInterval)
 
         // ── Populate ──
         tvUsername?.text   = username
@@ -83,12 +91,22 @@ class SettingsActivity : AppCompatActivity() {
         tvFitnessGoal?.text = goalLabel(fitnessGoal)
         tvNbrTries?.text   = "$nbrTries / 10 "
 
-        if (isPaying) cardUpgrade?.visibility = View.GONE
+        if (isPaying) {
+            tvSectionSubscription?.visibility = View.GONE
+            cardTries?.visibility = View.GONE
+            cardUpgrade?.visibility = View.GONE
+        }
 
         val savedTime    = prefs.getString("reminder_time", "08:00") ?: "08:00"
         val savedEnabled = prefs.getBoolean("reminder_enabled", false)
         tvReminderTime?.text      = savedTime
         switchReminder?.isChecked = savedEnabled
+
+        // Hydration Populate
+        val hydrationEnabled = prefs.getBoolean("hydration_enabled", false)
+        val hydrationInterval = prefs.getInt("hydration_interval", 60)
+        switchHydration?.isChecked = hydrationEnabled
+        tvHydrationInterval?.text = "$hydrationInterval min"
 
         btnBack?.setOnClickListener { finish() }
 
@@ -219,6 +237,45 @@ class SettingsActivity : AppCompatActivity() {
                     Toast.makeText(this, "Reminder updated: $formatted ⏰", Toast.LENGTH_SHORT).show()
                 }
             }, hour, minute, true).show()
+        }
+
+        // Hydration Logic
+        switchHydration?.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                if (checkNotificationPermission()) {
+                    prefs.edit().putBoolean("hydration_enabled", true).apply()
+                    requestExactAlarmPermissionIfNeeded()
+                    scheduleHydrationReminder(prefs.getInt("hydration_interval", 60))
+                    Toast.makeText(this, "Hydration reminders enabled ✅", Toast.LENGTH_SHORT).show()
+                } else {
+                    switchHydration.isChecked = false
+                    requestNotificationPermission()
+                }
+            } else {
+                prefs.edit().putBoolean("hydration_enabled", false).apply()
+                cancelHydrationReminder()
+                Toast.makeText(this, "Hydration reminders disabled", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        rowHydrationInterval?.setOnClickListener {
+            val intervals = arrayOf("30 min", "60 min", "90 min")
+            val values = intArrayOf(30, 60, 90)
+            val current = values.indexOf(prefs.getInt("hydration_interval", 60)).takeIf { it >= 0 } ?: 1
+            
+            AlertDialog.Builder(this)
+                .setTitle("Remind me every...")
+                .setSingleChoiceItems(intervals, current) { dialog, which ->
+                    val chosen = values[which]
+                    prefs.edit().putInt("hydration_interval", chosen).apply()
+                    tvHydrationInterval?.text = intervals[which]
+                    if (switchHydration?.isChecked == true) {
+                        scheduleHydrationReminder(chosen)
+                    }
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
         }
 
         // Edit reminder message
@@ -363,15 +420,42 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    private fun scheduleHydrationReminder(minutes: Int) {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val pi = buildHydrationPendingIntent()
+        val triggerAt = System.currentTimeMillis() + (minutes * 60 * 1000)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pi)
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAt, pi)
+        }
+    }
+
     private fun cancelReminder() {
         val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         am.cancel(buildReminderPendingIntent())
+    }
+
+    private fun cancelHydrationReminder() {
+        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        am.cancel(buildHydrationPendingIntent())
     }
 
     private fun buildReminderPendingIntent(): PendingIntent {
         val intent = Intent(this, ReminderReceiver::class.java)
         return PendingIntent.getBroadcast(
             this, 1001, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    private fun buildHydrationPendingIntent(): PendingIntent {
+        val intent = Intent(this, ReminderReceiver::class.java).apply {
+            putExtra("TYPE", "HYDRATION")
+        }
+        return PendingIntent.getBroadcast(
+            this, 1002, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }

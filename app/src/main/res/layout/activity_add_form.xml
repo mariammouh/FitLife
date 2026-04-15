@@ -16,7 +16,7 @@
         android:paddingEnd="8dp"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:navigationIconTint="@color/text_white"
-        app:title="Add Activity"
+        app:title="Add Workout"
         app:titleTextColor="@color/text_white" />
 
     <androidx.core.widget.NestedScrollView
@@ -50,7 +50,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Create a New Activity"
+                        android:text="Create a New Workout"
                         android:textColor="@android:color/white"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -59,7 +59,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Track your workout, cardio, yoga or daily activity with complete details."
+                        android:text="Track your workout, cardio, yoga or daily routines with complete details."
                         android:textColor="#E8DDFF"
                         android:textSize="15sp" />
                 </LinearLayout>
@@ -95,7 +95,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Activity Name"
+                        android:hint="Workout Name"
                         app:boxBackgroundColor="@color/field_bg_dark"
                         app:boxStrokeColor="@color/primary_violet"
                         app:hintTextColor="@color/hint_gray"
@@ -125,7 +125,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:hint="Activity Type"
+                            android:hint="Workout Type"
                             app:boxBackgroundColor="@color/field_bg_dark"
                             app:boxStrokeColor="@color/primary_violet"
                             app:hintTextColor="@color/hint_gray"
@@ -698,7 +698,7 @@
                 android:layout_height="58dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="30dp"
-                android:text="Save Activity"
+                android:text="Save Workout"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"

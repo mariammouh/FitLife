@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.google.android.filament.EntityManager
@@ -21,6 +22,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.nio.ByteBuffer
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AvatarActivity : AppCompatActivity() {
 
@@ -29,7 +32,6 @@ class AvatarActivity : AppCompatActivity() {
     private lateinit var modelViewer: ModelViewer
     private var userId: Int = -1
 
-    // Initial rotation to 0f to face the front
     private var manualRotationY = 0f
     private var lastX = 0f
 
@@ -40,8 +42,6 @@ class AvatarActivity : AppCompatActivity() {
     private val frameCallback = object : Choreographer.FrameCallback {
         override fun doFrame(frameTimeNanos: Long) {
             choreographer.postFrameCallback(this)
-
-            // Update model position every frame to fight internal resets
             updateAvatarTransform()
 
             modelViewer.animator?.let { animator ->
@@ -88,9 +88,7 @@ class AvatarActivity : AppCompatActivity() {
 
         surfaceView.setOnTouchListener { _, event ->
             when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    lastX = event.x
-                }
+                MotionEvent.ACTION_DOWN -> lastX = event.x
                 MotionEvent.ACTION_MOVE -> {
                     val dx = event.x - lastX
                     lastX = event.x
@@ -101,7 +99,6 @@ class AvatarActivity : AppCompatActivity() {
             true
         }
 
-        // Navigate to Profile on Info Card click
         findViewById<CardView>(R.id.cardAvatarInfo).setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             intent.putExtra("USER_ID", userId)
@@ -110,7 +107,55 @@ class AvatarActivity : AppCompatActivity() {
 
         findViewById<ImageButton>(R.id.btnBackAvatar).setOnClickListener { finish() }
 
-        loadAvatarData(userId)
+        // Step 1: Analyze activity and update state, then load
+        analyzeAndLoadAvatar()
+    }
+
+    private fun analyzeAndLoadAvatar() {
+        RetrofitClient.instance.getActivities(userId).enqueue(object : Callback<ActivityResponse> {
+            override fun onResponse(call: Call<ActivityResponse>, response: Response<ActivityResponse>) {
+                val activities = response.body()?.activities ?: emptyList()
+                val newState = determineFitnessState(activities)
+                
+                // Update DB with new state
+                val body = mapOf("user_id" to userId.toString(), "fitness_state" to newState)
+                RetrofitClient.instance.updateUser(body).enqueue(object : Callback<UpdateUserResponse> {
+                    override fun onResponse(call: Call<UpdateUserResponse>, response: Response<UpdateUserResponse>) {
+                        // After update, load the profile to get gender and show avatar
+                        loadAvatarData(userId)
+                    }
+                    override fun onFailure(call: Call<UpdateUserResponse>, t: Throwable) {
+                        loadAvatarData(userId) // Fallback to current even if update fails
+                    }
+                })
+            }
+            override fun onFailure(call: Call<ActivityResponse>, t: Throwable) {
+                loadAvatarData(userId)
+            }
+        })
+    }
+
+    private fun determineFitnessState(activities: List<ActivityModel>): String {
+        val lastWeek = Calendar.getInstance()
+        lastWeek.add(Calendar.DAY_OF_YEAR, -7)
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        
+        val recentActivities = activities.filter { 
+            try {
+                val date = sdf.parse(it.date ?: "")
+                date != null && date.after(lastWeek.time)
+            } catch (e: Exception) { false }
+        }
+
+        val count = recentActivities.size
+        val exhaustedCount = recentActivities.count { it.moodAfter?.lowercase() == "exhausted" || it.moodAfter?.lowercase() == "tired" }
+
+        return when {
+            exhaustedCount >= 3 -> "overworked"
+            count >= 5 -> "athletic"
+            count <= 1 -> "lazy"
+            else -> "healthy"
+        }
     }
 
     private fun updateAvatarTransform() {
@@ -123,14 +168,9 @@ class AvatarActivity : AppCompatActivity() {
         android.opengl.Matrix.setIdentityM(rotation, 0)
         android.opengl.Matrix.rotateM(rotation, 0, manualRotationY, 0f, 1f, 0f)
 
-        // Aggressive Model-Side Correction
         val correction = FloatArray(16)
         android.opengl.Matrix.setIdentityM(correction, 0)
-
-        // 1. Zoom out and lower the model.
         android.opengl.Matrix.translateM(correction, 0, 5.0f, -60.0f, -170.0f)
-
-        // 2. Scale it to a consistent size
         android.opengl.Matrix.scaleM(correction, 0, 0.6f, 0.6f, 0.6f)
 
         val temp = FloatArray(16)
@@ -138,7 +178,6 @@ class AvatarActivity : AppCompatActivity() {
 
         val result = FloatArray(16)
         android.opengl.Matrix.multiplyMM(result, 0, temp, 0, baseTransform, 0)
-
         tm.setTransform(instance, result)
     }
 
@@ -173,7 +212,7 @@ class AvatarActivity : AppCompatActivity() {
                     val state = user.fitness_state ?: "healthy"
                     findViewById<TextView>(R.id.tvAvatarState).text = state.uppercase()
                     val gender = user.gender ?: "female"
-                    loadModel("${gender}_${state}.glb")
+                    loadModel("${gender.lowercase()}_${state.lowercase()}.glb")
                 }
             }
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
@@ -195,7 +234,6 @@ class AvatarActivity : AppCompatActivity() {
                 if (instance != 0) {
                     tm.getTransform(instance, baseTransform)
                 }
-                // Face forward initially
                 manualRotationY = 0f
                 updateAvatarTransform()
             }
@@ -206,6 +244,11 @@ class AvatarActivity : AppCompatActivity() {
             }
         } catch (e: Exception) {
             Log.e("AVATAR_DEBUG", "Failed to load model: $assetName", e)
+            // Try loading default if specific state fails
+            if (assetName.contains("overworked") || assetName.contains("athletic") || assetName.contains("lazy")) {
+                 val gender = if (assetName.startsWith("male")) "male" else "female"
+                 loadModel("${gender}_healthy.glb")
+            }
         }
     }
 
@@ -216,13 +259,7 @@ class AvatarActivity : AppCompatActivity() {
 
         val aspect = width.toDouble() / height.toDouble()
         modelViewer.camera.setProjection(45.0, aspect, 0.1, 1000.0, com.google.android.filament.Camera.Fov.VERTICAL)
-
-        // Keep a neutral camera target
-        modelViewer.camera.lookAt(
-            0.0, 0.5, 4.0,
-            0.0, 0.5, 0.0,
-            0.0, 1.0, 0.0
-        )
+        modelViewer.camera.lookAt(0.0, 0.5, 4.0, 0.0, 0.5, 0.0, 0.0, 1.0, 0.0)
     }
 
     private fun readAsset(assetName: String): ByteBuffer {

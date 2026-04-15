@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Update Activity"
+            android:text="Update Workout"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
@@ -24,7 +24,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit your activity details"
+            android:text="Edit your workout details"
             android:textSize="14sp"
             android:textColor="#B8AFCF"
             android:layout_marginBottom="18dp" />
@@ -39,7 +39,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Activity Name"
+                android:hint="Workout Name"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeColor="#A259FF"
                 app:boxCornerRadiusTopStart="16dp"
@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:hint="Activity Type"
+                android:hint="Workout Type"
                 app:endIconMode="dropdown_menu"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeColor="#A259FF"

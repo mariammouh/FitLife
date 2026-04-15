@@ -81,6 +81,10 @@ class DashboardActivity : AppCompatActivity() {
                     val i = Intent(this, SettingsActivity::class.java)
                     i.putExtra("USER_ID", userId)
                     i.putExtra("USERNAME", currentUser?.username ?: "")
+                    i.putExtra("NBR_TRIES", currentUser?.nbr_tries ?: 0)
+                    i.putExtra("IS_PAYING", currentUser?.is_paying == 1)
+                    i.putExtra("GOAL_WEIGHT", currentUser?.goal_weight_kg?.toFloatOrNull() ?: 0f)
+                    i.putExtra("FITNESS_GOAL", currentUser?.goal ?: "")
                     startActivity(i)
                     true
                 }
@@ -97,7 +101,13 @@ class DashboardActivity : AppCompatActivity() {
                     currentUser = user
                     findViewById<TextView>(R.id.tvGreeting).text = "Ready to track your progress, ${user.username}?"
                     updateWeightProgress(user)
-                    consumeTry(userId)
+                    
+                    // Logic fix: Only consume try (and potentially lock) if NOT paying
+                    if (user.is_paying == 1) {
+                        findViewById<View>(R.id.layoutLocked)?.visibility = View.GONE
+                    } else {
+                        consumeTry(userId)
+                    }
                 }
             }
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
@@ -135,7 +145,13 @@ class DashboardActivity : AppCompatActivity() {
         val body = mapOf("user_id" to userId.toString())
         RetrofitClient.instance.useTry(body).enqueue(object : Callback<UseTryResponse> {
             override fun onResponse(call: Call<UseTryResponse>, response: Response<UseTryResponse>) {
-                if (response.body()?.locked == true) lockDashboard()
+                val data = response.body()
+                // Only lock if the backend says so AND user is not premium
+                if (data?.locked == true && data.is_paying == false) {
+                    lockDashboard()
+                } else {
+                    findViewById<View>(R.id.layoutLocked)?.visibility = View.GONE
+                }
             }
             override fun onFailure(call: Call<UseTryResponse>, t: Throwable) {}
         })

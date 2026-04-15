@@ -58,7 +58,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" Content Locked"
+                    android:text="Content Locked"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -207,7 +207,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="🔥 Streak this week"
+                        android:text="Streak this week"
                         android:textColor="@color/white"
                         android:textSize="14sp"/>
                     <TextView
@@ -241,7 +241,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📈 Calories this month"
+                        android:text="Calories this month"
                         android:textColor="@color/white"
                         android:textSize="15sp"
                         android:textStyle="bold"/>
@@ -270,7 +270,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🥧 Activity Types"
+                        android:text="Workout Types"
                         android:textColor="@color/white"
                         android:textSize="15sp"
                         android:textStyle="bold"/>
@@ -300,7 +300,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="😊 Mood after workout"
+                        android:text="Mood after workout"
                         android:textColor="@color/white"
                         android:textSize="15sp"
                         android:textStyle="bold"/>
@@ -336,7 +336,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🔥 Avg Kcal by type"
+                        android:text="Avg Kcal by type"
                         android:textColor="@color/white"
                         android:textSize="15sp"
                         android:textStyle="bold"/>
@@ -365,7 +365,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🏆 Best workout of the month"
+                        android:text="Best workout of the month"
                         android:textColor="#CCFFFFFF"
                         android:textSize="13sp"/>
                     <TextView
@@ -430,7 +430,7 @@
                             android:id="@+id/tvGoalType"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="⚖️ Weight Goal"
+                            android:text="Weight Goal"
                             android:textColor="@color/white"
                             android:textSize="15sp"
                             android:textStyle="bold"/>

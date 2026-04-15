@@ -95,7 +95,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
-                            android:text="Create My Activity"
+                            android:text="Create My Workout"
                             android:textColor="@color/primary_violet"
                             android:textSize="22sp"
                             android:textStyle="bold" />

@@ -2,9 +2,16 @@
     android:width="24dp"
     android:height="24dp"
     android:viewportWidth="24"
-    android:viewportHeight="24"
-    android:tint="?attr/colorControlNormal">
+    android:viewportHeight="24">
+
   <path
-      android:fillColor="@android:color/white"
-      android:pathData="M20.57,14.86L22,13.43L20.57,12L17,15.57L16.43,15L10.29,8.86L9.71,8.29L13.29,4.71L11.86,3.29L10.43,4.71L9,3.29L7.57,4.71L8.29,5.43L6.14,7.57L5.43,6.86L4,8.29L5.43,9.71L6.86,8.29L7.57,9L8.29,9.71L6.14,11.86L5.43,11.14L4,12.57L5.43,14L6.86,12.57L10.43,16.14L11,16.71L7.43,20.29L8.86,21.71L10.29,20.29L11.71,21.71L13.14,20.29L12.43,19.57L14.57,17.43L15.29,18.14L16.71,16.71L15.29,15.29L13.86,16.71L13.14,16L12.43,15.29L14.57,13.14L15.29,13.86L16.71,12.43L15.29,11L13.86,12.43L10.29,8.86L13.86,5.29L17.43,8.86L13.86,12.43Z"/>
+      android:fillColor="#000000"
+      android:pathData="
+            M2,10h2v4H2z
+            M4,9h2v6H4z
+            M6,8h2v8H6z
+            M16,8h2v8h-2z
+            M18,9h2v6h-2z
+            M20,10h2v4h-2z
+            M8,11h8v2H8z"/>
 </vector>

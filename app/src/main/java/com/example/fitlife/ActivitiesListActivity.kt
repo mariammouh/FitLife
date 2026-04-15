@@ -8,13 +8,13 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +26,7 @@ class ActivitiesListActivity : AppCompatActivity() {
     private lateinit var etSearch: TextInputEditText
     private lateinit var spinnerSort: Spinner
     private lateinit var txtEmpty: TextView
-    private lateinit var fabAdd: FloatingActionButton
+    private lateinit var btnCreateActivityBanner: LinearLayout
 
     private var userId: Int = -1
     private lateinit var adapter: ActivityAdapter
@@ -48,14 +48,14 @@ class ActivitiesListActivity : AppCompatActivity() {
         etSearch = findViewById(R.id.etSearch)
         spinnerSort = findViewById(R.id.spinnerSort)
         txtEmpty = findViewById(R.id.txtEmpty)
-        fabAdd = findViewById(R.id.fabAddActivity)
+        btnCreateActivityBanner = findViewById(R.id.btnCreateActivityBanner)
 
         recycler.layoutManager = LinearLayoutManager(this)
         adapter = ActivityAdapter(this)
         recycler.adapter = adapter
 
-        fabAdd.setOnClickListener {
-            val intent = Intent(this, AddActivity::class.java)
+        btnCreateActivityBanner.setOnClickListener {
+            val intent = Intent(this, AddActivityFormActivity::class.java)
             intent.putExtra("USER_ID", userId)
             startActivity(intent)
         }

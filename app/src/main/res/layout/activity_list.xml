@@ -6,99 +6,182 @@
     android:layout_height="match_parent"
     android:background="@color/bg_dark">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="14dp">
+        android:fillViewport="true">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarHistory"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:title="History"
-            android:titleTextColor="@color/text_white"
-            android:background="@android:color/transparent" />
+            android:padding="14dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="20dp"
-            app:cardBackgroundColor="@color/card_dark"
-            app:strokeColor="@color/primary_violet"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbarHistory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="14dp">
+                android:title="History"
+                android:titleTextColor="@color/text_white"
+                android:background="@android:color/transparent" />
 
-                <com.google.android.material.textfield.TextInputLayout
+            <!-- Banner inserted from Add Activity -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="265dp"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="0dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <!-- background image -->
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/fitness_banner" />
+
+                    <!-- violet overlay -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_banner_overlay" />
+
+                    <!-- content -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Your Fitness Journey"
+                            android:textColor="@android:color/white"
+                            android:textSize="28sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="A balanced plan designed to support your goals and lifestyle."
+                            android:textColor="#F3EEFF"
+                            android:textSize="18sp"
+                            android:lineSpacingExtra="2dp" />
+
+                        <LinearLayout
+                            android:id="@+id/btnCreateActivityBanner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="56dp"
+                            android:layout_marginTop="26dp"
+                            android:background="@drawable/bg_white_button"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="22dp"
+                            android:paddingEnd="22dp"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="+"
+                                android:textColor="@color/primary_violet"
+                                android:textSize="28sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:text="Create My Workout"
+                                android:textColor="@color/primary_violet"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="20dp"
+                app:cardBackgroundColor="@color/card_dark"
+                app:strokeColor="@color/primary_violet"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Search by type or date"
-                    app:boxBackgroundMode="outline"
-                    app:boxStrokeColor="@color/primary_violet"
-                    app:boxCornerRadiusTopStart="16dp"
-                    app:boxCornerRadiusTopEnd="16dp"
-                    app:boxCornerRadiusBottomStart="16dp"
-                    app:boxCornerRadiusBottomEnd="16dp"
-                    app:startIconDrawable="@android:drawable/ic_menu_search">
+                    android:orientation="vertical"
+                    android:padding="14dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etSearch"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/text_white"
-                        android:textColorHint="@color/hint_gray" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:hint="Search by type or date"
+                        android:textColorHint="@color/primary_violet"
+                        app:boxBackgroundMode="outline"
+                        app:boxStrokeColor="@color/primary_violet"
+                        app:hintTextColor="@color/primary_violet"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:startIconDrawable="@android:drawable/ic_menu_search"
+                        app:startIconTint="@color/primary_violet">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sort by"
-                    android:textColor="@color/hint_gray"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="6dp" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSearch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/text_white"
+                            android:textColorHint="@color/primary_violet" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                <Spinner
-                    android:id="@+id/spinnerSort"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:popupBackground="@color/card_dark" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sort by"
+                        android:textColor="@color/hint_gray"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="6dp" />
 
-        <TextView
-            android:id="@+id/txtEmpty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No activities found"
-            android:textColor="@color/hint_gray"
-            android:textSize="16sp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:visibility="gone" />
+                    <Spinner
+                        android:id="@+id/spinnerSort"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:popupBackground="@color/card_dark" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerActivities"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="10dp"/>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/txtEmpty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No workouts found"
+                android:textColor="@color/hint_gray"
+                android:textSize="16sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:visibility="gone" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="24dp"
-        android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/primary_violet"
-        app:tint="@android:color/white"
-        app:elevation="6dp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerActivities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:nestedScrollingEnabled="false"/>
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

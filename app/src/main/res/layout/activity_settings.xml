@@ -399,6 +399,72 @@
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1AFFFFFF" android:layout_marginHorizontal="16dp" />
 
+                <!-- HYDRATION SECTION -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:paddingHorizontal="16dp">
+                    <ImageView
+                        android:id="@+id/icWater"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_water"
+                        app:tint="@color/purple_200" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/icWater"
+                        android:layout_marginStart="12dp"
+                        android:text="Hydration Reminder"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchHydration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1AFFFFFF" android:layout_marginHorizontal="16dp" />
+
+                <RelativeLayout
+                    android:id="@+id/rowHydrationInterval"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:paddingHorizontal="16dp"
+                    android:background="?attr/selectableItemBackground">
+                    <ImageView
+                        android:id="@+id/icInterval"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_time"
+                        app:tint="@color/purple_200" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/icInterval"
+                        android:layout_marginStart="12dp"
+                        android:text="Hydration Interval"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/tvHydrationInterval"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:text="60 min"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1AFFFFFF" android:layout_marginHorizontal="16dp" />
+
                 <!-- Reminder Message -->
                 <RelativeLayout
                     android:id="@+id/rowReminderMessage"
@@ -467,6 +533,7 @@
         <!-- ══════════════════════════════════════ -->
 
         <TextView
+            android:id="@+id/tvSectionSubscription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SUBSCRIPTION"
@@ -479,6 +546,7 @@
             android:layout_marginBottom="8dp" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardTries"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
@@ -551,7 +619,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🚀 FitLife Premium"
+                            android:text="FitLife Premium"
                             android:textColor="#FFFFFF"
                             android:textSize="17sp"
                             android:textStyle="bold" />
