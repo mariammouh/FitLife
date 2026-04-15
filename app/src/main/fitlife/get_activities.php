@@ -3,9 +3,9 @@ header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 
 $host     = "localhost";
-$dbname   = "FitLife";
+$dbname   = "fitlife";
 $username = "root";
-$password = "";  // XAMPP default is empty
+$password = "";
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -20,18 +20,25 @@ try {
 
     $stmt = $pdo->prepare("
         SELECT 
-            activity_id,
-            activity_name,
-            activity_type,
-            duration_minutes,
-            calories_burned,
-            avg_heart_rate,
-            distance_km,
-            intensity,
-            mood_after,
-            activity_date,
-            start_time,
-            end_time
+            activity_id as id,
+            activity_name as name,
+            activity_type as type,
+            duration_minutes as duration,
+            distance_km as distance,
+            calories_burned as calories,
+            avg_heart_rate as avgHeart,
+            max_heart_rate as maxHeart,
+            sets as sets,
+            reps_per_set as reps,
+            weight_used_kg as weight,
+            intensity as intensity,
+            mood_before as moodBefore,
+            mood_after as moodAfter,
+            notes as notes,
+            location as location,
+            activity_date as date,
+            start_time as start,
+            end_time as end
         FROM sport_activity
         WHERE user_id = ?
         ORDER BY activity_date DESC
@@ -48,11 +55,6 @@ try {
     ]);
 
 } catch (PDOException $e) {
-    echo json_encode(["success" => false, "message" => $e->getMessage()]);
+    echo json_encode(["success" => false, "message" => "DB Error: " . $e->getMessage()]);
 }
 ?>
-```
-
-Test it in your browser:
-```
-http://localhost/fitlife/get_activities.php?user_id=1

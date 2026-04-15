@@ -28,14 +28,21 @@ class ActivitiesListActivity : AppCompatActivity() {
     private lateinit var txtEmpty: TextView
     private lateinit var fabAdd: FloatingActionButton
 
-    private var userId: Int = 1
+    private var userId: Int = -1
     private lateinit var adapter: ActivityAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
 
-        userId = intent.getIntExtra("USER_ID", 1)
+        userId = intent.getIntExtra("USER_ID", -1)
+        Log.d("ACTIVITIES_DEBUG", "ActivitiesList opened with USER_ID: $userId")
+
+        if (userId == -1) {
+            Toast.makeText(this, "Error: User ID not found", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
 
         recycler = findViewById(R.id.recyclerActivities)
         etSearch = findViewById(R.id.etSearch)
@@ -48,7 +55,7 @@ class ActivitiesListActivity : AppCompatActivity() {
         recycler.adapter = adapter
 
         fabAdd.setOnClickListener {
-            val intent = Intent(this, AddActivityFormActivity::class.java)
+            val intent = Intent(this, AddActivity::class.java)
             intent.putExtra("USER_ID", userId)
             startActivity(intent)
         }
@@ -97,12 +104,13 @@ class ActivitiesListActivity : AppCompatActivity() {
                     updateEmptyState()
                 } else {
                     Log.e("ACTIVITIES_DEBUG", "Server Error: ${response.code()}")
+                    Toast.makeText(this@ActivitiesListActivity, "Server Error: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ActivityResponse>, t: Throwable) {
                 Log.e("ACTIVITIES_DEBUG", "Fail: ${t.message}")
-                Toast.makeText(this@ActivitiesListActivity, "Connection Error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ActivitiesListActivity, "Connection Error: Check server/IP", Toast.LENGTH_LONG).show()
             }
         })
     }

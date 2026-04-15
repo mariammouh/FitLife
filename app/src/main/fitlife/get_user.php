@@ -19,7 +19,7 @@ try {
 
     $stmt = $pdo->prepare("
         SELECT user_id, full_name, username, email,
-               height_cm, weight_kg, goal_weight_kg,
+               height_cm, start_weight_kg, current_weight_kg, goal_weight_kg,
                goal, fitness_level, gender,
                fitness_state,
                nbr_tries, is_paying, created_at

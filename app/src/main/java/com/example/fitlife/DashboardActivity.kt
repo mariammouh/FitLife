@@ -5,22 +5,22 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.math.abs
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -30,6 +30,9 @@ class DashboardActivity : AppCompatActivity() {
     // Colors
     private val C_PURPLE_DEEP   = Color.parseColor("#3B1F9E")
     private val C_PURPLE_MID    = Color.parseColor("#7B4FE9")
+    private val C_VIOLET_SOFT   = Color.parseColor("#9B6FF9")
+    private val C_LAVENDER_BRIGHT = Color.parseColor("#BFA0FF")
+
     private val PIE_COLORS = listOf(
         Color.parseColor("#5B2FBE"), Color.parseColor("#7B4FE9"),
         Color.parseColor("#9B6FF9"), Color.parseColor("#BFA0FF"),
@@ -41,7 +44,6 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        // IMPORTANT: Get the ID from the Intent
         userId = intent.getIntExtra("USER_ID", -1)
         Log.d("DASHBOARD_DEBUG", "Dashboard opened with USER_ID: $userId")
 
@@ -93,16 +95,40 @@ class DashboardActivity : AppCompatActivity() {
                 val user = response.body()?.user
                 if (user != null) {
                     currentUser = user
-                    findViewById<TextView>(R.id.tvGreeting).text = "Hi, ${user.username}."
+                    findViewById<TextView>(R.id.tvGreeting).text = "Ready to track your progress, ${user.username}?"
+                    updateWeightProgress(user)
                     consumeTry(userId)
-                } else {
-                    Log.e("DASHBOARD_DEBUG", "User profile is NULL for ID: $userId")
                 }
             }
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 Log.e("DASHBOARD_DEBUG", "loadUserProfile FAILED: ${t.message}")
             }
         })
+    }
+
+    private fun updateWeightProgress(user: UserProfile) {
+        val current = user.current_weight_kg?.toFloatOrNull() ?: 0f
+        val start = user.start_weight_kg?.toFloatOrNull() ?: 0f
+        val goal = user.goal_weight_kg?.toFloatOrNull() ?: 0f
+        
+        findViewById<TextView>(R.id.tvCurrentWeight).text = String.format(Locale.US, "%.1f kg", current)
+        findViewById<TextView>(R.id.tvGoalWeight).text = String.format(Locale.US, "%.1f kg", goal)
+        findViewById<TextView>(R.id.tvStartWeight).text = String.format(Locale.US, "Start: %.1f kg", start)
+        
+        val totalToLose = start - goal
+        val currentLost = start - current
+        
+        val progress = if (totalToLose > 0) {
+            ((currentLost / totalToLose) * 100).toInt().coerceIn(0, 100)
+        } else if (current <= goal && goal > 0) {
+            100
+        } else 0
+
+        findViewById<ProgressBar>(R.id.progressWeight).progress = progress
+        findViewById<TextView>(R.id.tvProgressPercent).text = "$progress%"
+        
+        val remaining = abs(current - goal)
+        findViewById<TextView>(R.id.tvKgRemaining).text = String.format(Locale.US, "%.1f kg to go", remaining)
     }
 
     private fun consumeTry(userId: Int) {
@@ -127,6 +153,16 @@ class DashboardActivity : AppCompatActivity() {
                     data.today?.let { updateTodayStats(it) }
                     data.monthly_calories?.let { drawCaloriesLineChart(it) }
                     data.activity_types?.let { drawActivityPieChart(it) }
+                    data.mood_data?.let { drawMoodBarChart(it) }
+                    data.avg_by_type?.let { drawAvgCaloriesBarChart(it) }
+                    
+                    data.streak?.let { 
+                        findViewById<TextView>(R.id.tvStreakValue).text = "${it.active_days} / 7 days" 
+                    }
+                    data.week_comparison?.let { 
+                        findViewById<TextView>(R.id.tvWeekComparison).text = "${it.this_week} kcal" 
+                    }
+                    data.best_workout?.let { updateBestWorkout(it) }
                 }
             }
             override fun onFailure(call: Call<DashboardStatsResponse>, t: Throwable) {
@@ -135,10 +171,16 @@ class DashboardActivity : AppCompatActivity() {
         })
     }
 
+    private fun updateBestWorkout(best: BestWorkout) {
+        findViewById<TextView>(R.id.tvBestWorkoutName).text = best.activity_name
+        findViewById<TextView>(R.id.tvBestWorkoutCalories).text = "${best.calories_burned} kcal"
+        findViewById<TextView>(R.id.tvBestWorkoutDate).text = best.activity_date
+    }
+
     private fun updateTodayStats(today: TodayStats) {
         findViewById<TextView>(R.id.tvCaloriesValue).text    = "${today.total_calories} kcal"
         findViewById<TextView>(R.id.tvWorkoutTimeValue).text = "${today.total_minutes} min"
-        findViewById<TextView>(R.id.tvStepsValue).text       = "${today.total_activities} sessions"
+        findViewById<TextView>(R.id.tvStepsValue).text       = "${today.total_activities}"
     }
 
     private fun drawCaloriesLineChart(data: List<DailyCalories>) {
@@ -149,18 +191,114 @@ class DashboardActivity : AppCompatActivity() {
             color = C_PURPLE_MID
             setDrawFilled(true)
             fillColor = C_PURPLE_DEEP
+            setDrawValues(false)
+            mode = LineDataSet.Mode.CUBIC_BEZIER
         }
         chart.data = LineData(dataSet)
-        chart.xAxis.valueFormatter = IndexAxisValueFormatter(data.map { it.day.takeLast(5) })
+        chart.xAxis.apply {
+            valueFormatter = IndexAxisValueFormatter(data.map { it.day.takeLast(5) })
+            textColor = Color.WHITE
+            setDrawGridLines(false)
+            position = XAxis.XAxisPosition.BOTTOM
+        }
+        chart.axisLeft.apply {
+            textColor = Color.WHITE
+            setDrawGridLines(false)
+        }
+        chart.axisRight.isEnabled = false
+        chart.description.isEnabled = false
+        chart.legend.isEnabled = false
         chart.invalidate()
     }
 
     private fun drawActivityPieChart(data: List<ActivityTypeCount>) {
         val chart = findViewById<PieChart>(R.id.pieChartTypes) ?: return
         if (data.isEmpty()) return
-        val entries = data.map { PieEntry(it.count.toFloat(), it.activity_type) }
-        val dataSet = PieDataSet(entries, "").apply { colors = PIE_COLORS }
+        val entries = data.map { PieEntry(it.count.toFloat(), it.activity_type.replaceFirstChar { it.uppercase() }) }
+        val dataSet = PieDataSet(entries, "").apply { 
+            colors = PIE_COLORS 
+            valueTextColor = Color.WHITE
+            valueTextSize = 12f
+        }
         chart.data = PieData(dataSet)
+        chart.description.isEnabled = false
+        chart.centerText = "Sessions"
+        chart.setCenterTextColor(Color.WHITE)
+        chart.setHoleColor(Color.TRANSPARENT)
+        chart.legend.textColor = Color.WHITE
+        chart.invalidate()
+    }
+
+    private fun drawMoodBarChart(data: List<MoodEntry>) {
+        val chart = findViewById<BarChart>(R.id.barChartMood) ?: return
+        if (data.isEmpty()) return
+
+        val avgMoods = data.groupBy { it.activity_type }.mapValues { entry ->
+            val totalScore = entry.value.sumOf { moodToScore(it.mood_after) * it.count }
+            val totalCount = entry.value.sumOf { it.count }
+            totalScore.toFloat() / totalCount
+        }
+
+        val entries = avgMoods.values.mapIndexed { i, score -> BarEntry(i.toFloat(), score) }
+        val dataSet = BarDataSet(entries, "Mood Score").apply {
+            color = C_VIOLET_SOFT
+            valueTextColor = Color.WHITE
+            setDrawValues(false)
+        }
+        chart.data = BarData(dataSet)
+        chart.xAxis.apply {
+            valueFormatter = IndexAxisValueFormatter(avgMoods.keys.map { it.replaceFirstChar { it.uppercase() } })
+            textColor = Color.WHITE
+            setDrawGridLines(false)
+            position = XAxis.XAxisPosition.BOTTOM
+            granularity = 1f
+            isGranularityEnabled = true
+        }
+        chart.axisLeft.apply {
+            textColor = Color.WHITE
+            setDrawGridLines(false)
+        }
+        chart.axisRight.isEnabled = false
+        chart.description.isEnabled = false
+        chart.legend.isEnabled = false
+        chart.invalidate()
+    }
+
+    private fun moodToScore(mood: String): Int = when(mood.lowercase()) {
+        "great" -> 5
+        "good" -> 4
+        "neutral" -> 3
+        "tired" -> 2
+        "exhausted" -> 1
+        else -> 3
+    }
+
+    private fun drawAvgCaloriesBarChart(data: List<AvgByType>) {
+        val chart = findViewById<BarChart>(R.id.barChartAvgCalories) ?: return
+        if (data.isEmpty()) return
+
+        val entries = data.mapIndexed { i, it -> BarEntry(i.toFloat(), it.avg_calories) }
+        val dataSet = BarDataSet(entries, "Avg Kcal").apply {
+            color = C_LAVENDER_BRIGHT
+            valueTextColor = Color.WHITE
+            setDrawValues(false)
+        }
+        chart.data = BarData(dataSet)
+        chart.xAxis.apply {
+            valueFormatter = IndexAxisValueFormatter(data.map { it.activity_type.replaceFirstChar { it.uppercase() } })
+            textColor = Color.WHITE
+            setDrawGridLines(false)
+            position = XAxis.XAxisPosition.BOTTOM
+            granularity = 1f
+            isGranularityEnabled = true
+        }
+        chart.axisLeft.apply {
+            textColor = Color.WHITE
+            setDrawGridLines(false)
+        }
+        chart.axisRight.isEnabled = false
+        chart.description.isEnabled = false
+        chart.legend.isEnabled = false
         chart.invalidate()
     }
 }

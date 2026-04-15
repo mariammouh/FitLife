@@ -18,31 +18,33 @@
             android:orientation="vertical">
 
             <!-- ══ TOP BAR ══ -->
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:paddingHorizontal="20dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp">
 
                 <TextView
                     android:id="@+id/tvGreeting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="Hi, ..."
+                    android:text="Ready to track your progress?"
                     android:textColor="@color/white"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tvGreeting"
+                    android:layout_marginTop="2dp"
                     android:text="Today"
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <!-- ══ LOCKED OVERLAY ══ -->
             <LinearLayout
@@ -340,8 +342,7 @@
                         android:textStyle="bold"/>
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/barChartAvgCalories"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_width="match_parent" android:layout_height="200dp"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

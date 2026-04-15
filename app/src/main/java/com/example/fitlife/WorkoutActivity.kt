@@ -53,20 +53,23 @@ class WorkoutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Utils.init()
-        setContentView(R.layout.activity_avatar) // Reusing the avatar layout
-
-        // Hide UI elements not needed for workout
-        findViewById<View>(R.id.avatarPlaceholder).visibility = View.GONE
-        findViewById<View>(R.id.btnReloadAvatar).visibility = View.GONE
-        findViewById<View>(R.id.tvAvatarState).visibility = View.GONE
+        setContentView(R.layout.activity_avatar)
 
         val workoutName = intent.getStringExtra("WORKOUT_NAME") ?: "cardio"
-        findViewById<TextView>(R.id.tvAvatarName).text = workoutName.uppercase()
+        
+        // Find and update the title
+        val tvTitle = findViewById<TextView>(R.id.tvAvatarName)
+        tvTitle.text = workoutName.uppercase()
+        
+        // Hide profile-specific UI
+        findViewById<View>(R.id.tvAvatarState)?.visibility = View.GONE
+        findViewById<View>(R.id.avatarPlaceholder)?.visibility = View.GONE
 
+        val container = findViewById<FrameLayout>(R.id.filamentContainer)
         surfaceView = SurfaceView(this).apply {
             setZOrderMediaOverlay(true)
         }
-        val container = findViewById<FrameLayout>(R.id.filamentContainer)
+        container.removeAllViews()
         container.addView(surfaceView)
 
         choreographer = Choreographer.getInstance()
@@ -159,7 +162,7 @@ class WorkoutActivity : AppCompatActivity() {
                 modelViewer.render(System.nanoTime())
             }
         } catch (e: Exception) {
-            Log.e("WORKOUT_DEBUG", "Failed to load model: $assetPath", e)
+            Log.e("WORKOUT_DEBUG", "Failed to load: $assetPath", e)
         }
     }
 

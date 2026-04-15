@@ -8,46 +8,36 @@
     android:background="@color/background_black"
     android:padding="24dp">
 
-    <!-- Logo / Icône Flamme -->
+    <!-- Logo / Flame Icon -->
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="60dp"
-        android:src="@drawable/ic_fitness_logo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/logo"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/tvWelcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hi, Fitlifer."
-        android:textColor="@color/text_white"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/logo"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
         android:id="@+id/tvSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Connectez-vous pour suivre vos progrès"
+        android:text="Sign in to track your progress"
         android:textColor="@color/text_gray"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/tvWelcome"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Conteneur Email -->
+    <!-- Email Container -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilEmail"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="32dp"
         android:hint="Email"
         android:textColorHint="@color/text_gray"
         app:boxStrokeColor="@color/accent_purple"
@@ -66,14 +56,14 @@
             android:textColor="@color/text_white" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Conteneur Mot de passe -->
+    <!-- Password Container -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilPassword"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Mot de passe"
+        android:hint="Password"
         android:textColorHint="@color/text_gray"
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@color/text_gray"
@@ -93,13 +83,13 @@
             android:textColor="@color/text_white" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Bouton de connexion -->
+    <!-- Login Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSignIn"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="32dp"
-        android:text="SE CONNECTER"
+        android:text="SIGN IN"
         android:textAllCaps="true"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -107,13 +97,13 @@
         app:cornerRadius="30dp"
         app:layout_constraintTop_toBottomOf="@id/tilPassword" />
 
-    <!-- Lien vers l'inscription -->
+    <!-- Sign Up Link -->
     <TextView
         android:id="@+id/tvGoToSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="Nouveau ici ? Créez un compte"
+        android:text="New here? Create an account"
         android:textColor="@color/primary_purple"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"

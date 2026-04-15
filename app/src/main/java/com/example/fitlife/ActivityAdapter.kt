@@ -40,10 +40,10 @@ class ActivityAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val activity = filteredList[position]
 
-        holder.txtName.text = activity.name
-        holder.txtType.text = activity.type
-        holder.txtDate.text = activity.date
-        holder.txtDuration.text = "${activity.duration} min"
+        holder.txtName.text = activity.name ?: "Unnamed"
+        holder.txtType.text = activity.type ?: "General"
+        holder.txtDate.text = activity.date ?: ""
+        holder.txtDuration.text = "${activity.duration ?: "0"} min"
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ActivityDetailActivity::class.java)
@@ -96,7 +96,7 @@ class ActivityAdapter(
         }
 
         holder.btnDelete.setOnClickListener {
-            deleteActivity(activity.id)
+            activity.id?.let { id -> deleteActivity(id) }
         }
     }
 
@@ -120,9 +120,9 @@ class ActivityAdapter(
         } else {
             filteredList.addAll(
                 originalList.filter {
-                    it.type.lowercase().contains(search) ||
-                            it.date.lowercase().contains(search) ||
-                            it.name.lowercase().contains(search)
+                    (it.type?.lowercase()?.contains(search) ?: false) ||
+                            (it.date?.lowercase()?.contains(search) ?: false) ||
+                            (it.name?.lowercase()?.contains(search) ?: false)
                 }
             )
         }
@@ -133,14 +133,15 @@ class ActivityAdapter(
     fun sortList(option: String) {
         when (option) {
             "Date" -> filteredList.sortByDescending { it.date }
-            "Duration" -> filteredList.sortByDescending { it.duration.toIntOrNull() ?: 0 }
-            "Type" -> filteredList.sortBy { it.type.lowercase() }
+            "Duration" -> filteredList.sortByDescending { it.duration?.toIntOrNull() ?: 0 }
+            "Type" -> filteredList.sortBy { it.type?.lowercase() ?: "" }
         }
         notifyDataSetChanged()
     }
 
     private fun deleteActivity(id: String) {
-        val url = "http://10.0.2.2/fitlife/delete_activity.php"
+        // Use the IP address consistent with the rest of the app
+        val url = "http://192.168.0.102/fitlife/delete_activity.php"
 
         val request = object : StringRequest(
             Request.Method.POST,

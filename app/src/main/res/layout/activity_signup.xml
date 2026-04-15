@@ -12,32 +12,56 @@
         android:orientation="vertical"
         android:padding="24dp">
 
+        <!-- Header -->
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/logo" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Créer votre profil"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:text="Join FitLife"
             android:textColor="@color/text_white"
             android:textSize="28sp"
             android:textStyle="bold" />
 
-        <!-- GROUPE 1: INFOS DE BASE -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Informations du compte"
-            android:textColor="@color/primary_purple"
-            android:textStyle="bold" />
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Start your health journey today"
+            android:textColor="@color/text_gray"
+            android:textSize="14sp" />
 
-        <!-- Nom Complet -->
+        <!-- GROUP 1: ACCOUNT -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Account Details"
+            android:textColor="@color/primary_purple"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:letterSpacing="0.1" />
+
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Nom complet"
-            app:boxCornerRadiusTopStart="12dp" app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp" app:boxCornerRadiusBottomEnd="12dp">
+            android:layout_marginTop="12dp"
+            android:hint="Full Name"
+            android:textColorHint="@color/text_gray"
+            app:boxStrokeColor="@color/accent_purple"
+            app:hintTextColor="@color/accent_purple"
+            app:boxCornerRadiusTopStart="16dp" app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp" app:boxCornerRadiusBottomEnd="16dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etFullName"
                 android:layout_width="match_parent"
@@ -45,15 +69,17 @@
                 android:textColor="@color/text_white" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Email -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:hint="Email"
-            app:boxCornerRadiusTopStart="12dp" app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp" app:boxCornerRadiusBottomEnd="12dp">
+            android:hint="Email Address"
+            android:textColorHint="@color/text_gray"
+            app:boxStrokeColor="@color/accent_purple"
+            app:hintTextColor="@color/accent_purple"
+            app:boxCornerRadiusTopStart="16dp" app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp" app:boxCornerRadiusBottomEnd="16dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmailSignUp"
                 android:layout_width="match_parent"
@@ -62,16 +88,19 @@
                 android:textColor="@color/text_white" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Password -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:hint="Mot de passe"
+            android:hint="Create Password"
+            android:textColorHint="@color/text_gray"
             app:passwordToggleEnabled="true"
-            app:boxCornerRadiusTopStart="12dp" app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp" app:boxCornerRadiusBottomEnd="12dp">
+            app:passwordToggleTint="@color/text_gray"
+            app:boxStrokeColor="@color/accent_purple"
+            app:hintTextColor="@color/accent_purple"
+            app:boxCornerRadiusTopStart="16dp" app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp" app:boxCornerRadiusBottomEnd="16dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPasswordSignUp"
                 android:layout_width="match_parent"
@@ -80,20 +109,23 @@
                 android:textColor="@color/text_white" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- GROUPE 2: DONNÉES CORPORELLES -->
+        <!-- GROUP 2: PHYSICAL -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Données corporelles"
+            android:text="Physical Profile"
             android:textColor="@color/primary_purple"
-            android:textStyle="bold" />
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:letterSpacing="0.1" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:baselineAligned="false">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -102,9 +134,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                android:hint="Taille (cm)"
-                app:boxCornerRadiusTopStart="12dp" app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp" app:boxCornerRadiusBottomEnd="12dp">
+                android:hint="Height (cm)"
+                android:textColorHint="@color/text_gray"
+                app:boxStrokeColor="@color/accent_purple"
+                app:hintTextColor="@color/accent_purple"
+                app:boxCornerRadiusTopStart="16dp" app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp" app:boxCornerRadiusBottomEnd="16dp">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etHeight"
                     android:layout_width="match_parent"
@@ -118,9 +153,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Poids (kg)"
-                app:boxCornerRadiusTopStart="12dp" app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp" app:boxCornerRadiusBottomEnd="12dp">
+                android:hint="Weight (kg)"
+                android:textColorHint="@color/text_gray"
+                app:boxStrokeColor="@color/accent_purple"
+                app:hintTextColor="@color/accent_purple"
+                app:boxCornerRadiusTopStart="16dp" app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp" app:boxCornerRadiusBottomEnd="16dp">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etWeight"
                     android:layout_width="match_parent"
@@ -130,39 +168,16 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- GROUPE 3: OBJECTIFS -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Objectifs Fitness"
-            android:textColor="@color/primary_purple"
-            android:textStyle="bold" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Type d'objectif"
-            app:boxCornerRadiusTopStart="12dp" app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp" app:boxCornerRadiusBottomEnd="12dp">
-            <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textColor="@color/text_white" />
-        </com.google.android.material.textfield.TextInputLayout>
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="40dp"
-            android:layout_marginBottom="24dp"
-            android:text="Créer mon compte"
+            android:layout_marginBottom="40dp"
+            android:text="Create My Account"
             android:textAllCaps="false"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:backgroundTint="@color/accent_purple"
             app:cornerRadius="30dp" />
 

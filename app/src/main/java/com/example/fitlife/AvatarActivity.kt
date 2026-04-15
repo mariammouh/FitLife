@@ -1,5 +1,6 @@
 package com.example.fitlife
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Choreographer
@@ -9,8 +10,8 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import com.google.android.filament.EntityManager
 import com.google.android.filament.LightManager
 import com.google.android.filament.Skybox
@@ -26,6 +27,7 @@ class AvatarActivity : AppCompatActivity() {
     private lateinit var surfaceView: SurfaceView
     private lateinit var choreographer: Choreographer
     private lateinit var modelViewer: ModelViewer
+    private var userId: Int = -1
 
     // Initial rotation to 0f to face the front
     private var manualRotationY = 0f
@@ -62,6 +64,8 @@ class AvatarActivity : AppCompatActivity() {
         Utils.init()
         setContentView(R.layout.activity_avatar)
 
+        userId = intent.getIntExtra("USER_ID", 1)
+
         findViewById<View>(R.id.avatarPlaceholder).visibility = View.GONE
 
         surfaceView = SurfaceView(this).apply {
@@ -97,12 +101,16 @@ class AvatarActivity : AppCompatActivity() {
             true
         }
 
-        findViewById<Button>(R.id.btnReloadAvatar).setOnClickListener {
-            loadAvatarData(intent.getIntExtra("USER_ID", 1))
+        // Navigate to Profile on Info Card click
+        findViewById<CardView>(R.id.cardAvatarInfo).setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.putExtra("USER_ID", userId)
+            startActivity(intent)
         }
+
         findViewById<ImageButton>(R.id.btnBackAvatar).setOnClickListener { finish() }
 
-        loadAvatarData(intent.getIntExtra("USER_ID", 1))
+        loadAvatarData(userId)
     }
 
     private fun updateAvatarTransform() {
@@ -120,7 +128,6 @@ class AvatarActivity : AppCompatActivity() {
         android.opengl.Matrix.setIdentityM(correction, 0)
 
         // 1. Zoom out and lower the model.
-        // With Far Plane set to 1000.0 in setupCamera, we can now use lower Y values safely.
         android.opengl.Matrix.translateM(correction, 0, 5.0f, -60.0f, -170.0f)
 
         // 2. Scale it to a consistent size
@@ -208,8 +215,6 @@ class AvatarActivity : AppCompatActivity() {
         if (width <= 0 || height <= 0) return
 
         val aspect = width.toDouble() / height.toDouble()
-        // INCREASED FAR PLANE TO 1000.0 (prev was 100.0)
-        // This stops the avatar from disappearing when moved far away.
         modelViewer.camera.setProjection(45.0, aspect, 0.1, 1000.0, com.google.android.filament.Camera.Fov.VERTICAL)
 
         // Keep a neutral camera target

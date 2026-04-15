@@ -2,7 +2,9 @@ package com.example.fitlife
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +21,15 @@ class AddActivityFormActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_form)
+
+        val userId = intent.getIntExtra("USER_ID", -1)
+        Log.d("FORM_DEBUG", "Form opened with USER_ID: $userId")
+
+        if (userId == -1) {
+            Toast.makeText(this, "Error: User ID not found", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
 
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbarForm)
         toolbar.setNavigationOnClickListener { finish() }
@@ -45,8 +56,6 @@ class AddActivityFormActivity : AppCompatActivity() {
         val actMoodAfter = findViewById<AutoCompleteTextView>(R.id.actMoodAfter)
 
         val btnSave = findViewById<Button>(R.id.btnSaveActivity)
-
-        val userId = intent.getIntExtra("USER_ID", 1)
 
         etActivityDate.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -83,8 +92,9 @@ class AddActivityFormActivity : AppCompatActivity() {
         btnShowWorkout.setOnClickListener {
             val selectedType = actActivityType.text.toString()
             if (selectedType.isNotEmpty()) {
-                val intent = android.content.Intent(this, WorkoutActivity::class.java)
+                val intent = Intent(this, WorkoutActivity::class.java)
                 intent.putExtra("WORKOUT_NAME", selectedType)
+                intent.putExtra("USER_ID", userId)
                 startActivity(intent)
             }
         }
@@ -100,6 +110,8 @@ class AddActivityFormActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             if (etActivityName.text.isNullOrEmpty()) { etActivityName.error = "Required"; return@setOnClickListener }
             if (actActivityType.text.isNullOrEmpty()) { actActivityType.error = "Required"; return@setOnClickListener }
+
+            Log.d("FORM_DEBUG", "Saving activity for user $userId: ${etActivityName.text}")
 
             RetrofitClient.instance.saveActivity(
                 userId,
@@ -127,11 +139,13 @@ class AddActivityFormActivity : AppCompatActivity() {
                         Toast.makeText(this@AddActivityFormActivity, "Activity Saved!", Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
-                        Toast.makeText(this@AddActivityFormActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                        Log.e("FORM_DEBUG", "Save Error: ${response.code()} ${response.message()}")
+                        Toast.makeText(this@AddActivityFormActivity, "Error ${response.code()}: ${response.message()}", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e("FORM_DEBUG", "Save Failure: ${t.message}")
                     Toast.makeText(this@AddActivityFormActivity, "Connection Error", Toast.LENGTH_SHORT).show()
                 }
             })

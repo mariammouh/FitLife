@@ -48,24 +48,17 @@
                 android:layout_height="match_parent"
                 android:background="#1A1A2E" />
 
-            <!-- Reload Button -->
-            <Button
-                android:id="@+id/btnReloadAvatar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:text="Reload Avatar"
-                android:textSize="10sp"
-                android:alpha="0.5"
-                android:backgroundTint="#4A4A6A" />
         </FrameLayout>
 
-        <!-- INFO CARD -->
+        <!-- INFO CARD (Clickable to Profile) -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardAvatarInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="#1A1A2E"
             app:cardCornerRadius="16dp">
             <LinearLayout

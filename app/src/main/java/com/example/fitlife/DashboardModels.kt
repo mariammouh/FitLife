@@ -5,15 +5,16 @@ data class UserProfile(
     val full_name: String,
     val username: String,
     val email: String,
-    val height_cm: String?,       // JSON returns "167.00" as string
-    val weight_kg: String?,       // JSON returns "60.50" as string
-    val goal_weight_kg: String?,  // JSON returns "55.00" as string
+    val height_cm: String?,
+    val start_weight_kg: String?,   // Rename from weight_kg
+    val current_weight_kg: String?, // New attribute
+    val goal_weight_kg: String?,
     val goal: String?,
     val fitness_level: String?,
     val gender: String?,
-    val fitness_state: String?,  // underworked/beginner/active/healthy/athletic/overworked
+    val fitness_state: String?,
     val nbr_tries: Int,
-    val is_paying: Int,           // JSON returns 1 or 0
+    val is_paying: Int,
     val created_at: String?
 )
 
