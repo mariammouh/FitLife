@@ -5,7 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.textfield.TextInputEditText
+import com.example.fitlife.databinding.ActivityLoginBinding
+import com.example.fitlife.databinding.ActivitySignupBinding
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
@@ -22,17 +23,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLogin() {
-        setContentView(R.layout.activity_login)
-        val btnSignIn = findViewById<Button>(R.id.btnSignIn)
-        val etEmail = findViewById<TextInputEditText>(R.id.etEmail)
-        val etPassword = findViewById<TextInputEditText>(R.id.etPassword)
-        val tvGoToSignUp = findViewById<TextView>(R.id.tvGoToSignUp)
+        val binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        tvGoToSignUp?.setOnClickListener { showSignUp() }
+        binding.tvGoToSignUp.setOnClickListener { showSignUp() }
 
-        btnSignIn?.setOnClickListener {
-            val email = etEmail?.text.toString()
-            val pass = etPassword?.text.toString()
+        binding.btnSignIn.setOnClickListener {
+            val email = binding.etEmail.text.toString()
+            val pass = binding.etPassword.text.toString()
             if (email.isNotEmpty() && pass.isNotEmpty()) {
                 loginToServer(email, pass)
             } else {
@@ -42,25 +40,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showSignUp() {
-        setContentView(R.layout.activity_signup)
-        val btnSignUp = findViewById<Button>(R.id.btnSignUp)
-        val etFullName = findViewById<TextInputEditText>(R.id.etFullName)
-        val etEmail = findViewById<TextInputEditText>(R.id.etEmailSignUp)
-        val etPassword = findViewById<TextInputEditText>(R.id.etPasswordSignUp)
-        val etHeight = findViewById<TextInputEditText>(R.id.etHeight)
-        val etWeight = findViewById<TextInputEditText>(R.id.etWeight)
+        val binding = ActivitySignupBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        btnSignUp?.setOnClickListener {
-            val name = etFullName?.text.toString()
-            val email = etEmail?.text.toString()
-            val pass = etPassword?.text.toString()
-            val h = etHeight?.text.toString()
-            val w = etWeight?.text.toString()
+        binding.btnSignUp.setOnClickListener {
+            val name = binding.etFullName.text.toString()
+            val username = binding.etUsernameSignUp.text.toString()
+            val email = binding.etEmailSignUp.text.toString()
+            val pass = binding.etPasswordSignUp.text.toString()
+            val phone = binding.etPhoneSignUp.text.toString()
+            val dob = binding.etDobSignUp.text.toString()
+            val gender = binding.etGenderSignUp.text.toString()
+            val height = binding.etHeight.text.toString()
+            val startWeight = binding.etWeight.text.toString()
+            val currWeight = binding.etCurrentWeightSignUp.text.toString()
+            val goalWeight = binding.etGoalWeightSignUp.text.toString()
+            val goal = binding.etGoalSignUp.text.toString()
+            val level = binding.etFitnessLevelSignUp.text.toString()
 
-            if (name.isNotEmpty() && email.isNotEmpty() && pass.isNotEmpty()) {
-                registerOnServer(name, email, pass, h, w)
+            if (name.isNotEmpty() && email.isNotEmpty() && pass.isNotEmpty() && username.isNotEmpty()) {
+                registerOnServer(name, username, email, pass, phone, gender, dob, height, startWeight, currWeight, goalWeight, goal, level)
             } else {
-                Toast.makeText(this, "Missing required fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Missing required fields (Name, Username, Email, Password)", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -116,8 +117,12 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun registerOnServer(name: String, email: String, pass: String, h: String, w: String) {
-        api.registerUser(name, email, pass, h, w).enqueue(object : Callback<ResponseBody> {
+    private fun registerOnServer(
+        name: String, uname: String, email: String, pass: String, phone: String, 
+        gender: String, dob: String, h: String, sw: String, cw: String, gw: String, 
+        goal: String, level: String
+    ) {
+        api.registerUser(name, uname, email, pass, phone, gender, dob, h, sw, cw, gw, goal, level).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     Toast.makeText(this@MainActivity, "Account created! Please login", Toast.LENGTH_LONG).show()

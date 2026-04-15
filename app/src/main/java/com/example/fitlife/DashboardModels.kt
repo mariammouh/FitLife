@@ -5,13 +5,15 @@ data class UserProfile(
     val full_name: String,
     val username: String,
     val email: String,
+    val phone: String?,
+    val gender: String?,
+    val date_of_birth: String?,
     val height_cm: String?,
-    val start_weight_kg: String?,   // Rename from weight_kg
-    val current_weight_kg: String?, // New attribute
+    val start_weight_kg: String?,
+    val current_weight_kg: String?,
     val goal_weight_kg: String?,
     val goal: String?,
     val fitness_level: String?,
-    val gender: String?,
     val fitness_state: String?,
     val nbr_tries: Int,
     val is_paying: Int,

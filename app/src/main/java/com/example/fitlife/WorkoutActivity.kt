@@ -55,12 +55,20 @@ class WorkoutActivity : AppCompatActivity() {
         Utils.init()
         setContentView(R.layout.activity_avatar)
 
-        val workoutName = intent.getStringExtra("WORKOUT_NAME") ?: "cardio"
+        val workoutName = intent.getStringExtra("WORKOUT_NAME") ?: "Yoga"
+        Log.d("WORKOUT_DEBUG", "Starting WorkoutActivity for: $workoutName")
         
-        // Find and update the title
+        // Find and update the header/title
+        val tvHeader = findViewById<TextView>(R.id.tvAvatarHeader)
+        tvHeader.text = "Workout Instructor"
+
         val tvTitle = findViewById<TextView>(R.id.tvAvatarName)
         tvTitle.text = workoutName.uppercase()
         
+        // Update description for context
+        val tvDesc = findViewById<TextView>(R.id.tvAvatarDesc)
+        tvDesc.text = "Follow the movements of your $workoutName instructor."
+
         // Hide profile-specific UI
         findViewById<View>(R.id.tvAvatarState)?.visibility = View.GONE
         findViewById<View>(R.id.avatarPlaceholder)?.visibility = View.GONE
@@ -99,6 +107,7 @@ class WorkoutActivity : AppCompatActivity() {
 
         findViewById<ImageButton>(R.id.btnBackAvatar).setOnClickListener { finish() }
 
+        // Attempt to load the model.
         loadModel("workout/${workoutName.lowercase()}.glb")
     }
 
@@ -112,10 +121,13 @@ class WorkoutActivity : AppCompatActivity() {
         android.opengl.Matrix.setIdentityM(rotation, 0)
         android.opengl.Matrix.rotateM(rotation, 0, manualRotationY, 0f, 1f, 0f)
 
+        // Aggressive Model-Side Correction matching AvatarActivity logic
         val correction = FloatArray(16)
         android.opengl.Matrix.setIdentityM(correction, 0)
-        android.opengl.Matrix.translateM(correction, 0, 0.0f, -0.5f, -2.0f)
-        android.opengl.Matrix.scaleM(correction, 0, 1.0f, 1.0f, 1.0f)
+        
+        // Match AvatarActivity's coordinate system and scale
+        android.opengl.Matrix.translateM(correction, 0, 5.0f, -60.0f, -170.0f)
+        android.opengl.Matrix.scaleM(correction, 0, 0.6f, 0.6f, 0.6f)
 
         val temp = FloatArray(16)
         android.opengl.Matrix.multiplyMM(temp, 0, correction, 0, rotation, 0)
@@ -142,6 +154,7 @@ class WorkoutActivity : AppCompatActivity() {
 
     private fun loadModel(assetPath: String) {
         try {
+            Log.d("WORKOUT_DEBUG", "Loading asset: $assetPath")
             val buffer = readAsset(assetPath)
             modelViewer.loadModelGlb(buffer)
             modelViewer.transformToUnitCube()

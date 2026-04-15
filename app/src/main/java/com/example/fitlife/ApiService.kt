@@ -10,10 +10,18 @@ interface ApiService {
     @POST("register.php")
     fun registerUser(
         @Field("full_name") fullName: String,
+        @Field("username") username: String,
         @Field("email") email: String,
         @Field("password") pass: String,
+        @Field("phone") phone: String,
+        @Field("gender") gender: String,
+        @Field("dob") dob: String,
         @Field("height") height: String,
-        @Field("weight") weight: String
+        @Field("start_weight") startWeight: String,
+        @Field("current_weight") currentWeight: String,
+        @Field("goal_weight") goalWeight: String,
+        @Field("goal") goal: String,
+        @Field("fitness_level") fitnessLevel: String
     ): Call<ResponseBody>
 
     @FormUrlEncoded
@@ -25,19 +33,6 @@ interface ApiService {
     fun loginUser(
         @Field("email") email: String,
         @Field("password") pass: String
-    ): Call<ResponseBody>
-
-    @FormUrlEncoded
-    @POST("get_profile.php")
-    fun getProfile(@Field("email") email: String): Call<ResponseBody>
-
-    @FormUrlEncoded
-    @POST("update_profile.php")
-    fun updateProfile(
-        @Field("email") email: String,
-        @Field("full_name") name: String,
-        @Field("age") age: String,
-        @Field("goal") goal: String
     ): Call<ResponseBody>
 
     @GET("get_user.php")
@@ -54,6 +49,13 @@ interface ApiService {
 
     @POST("use_try.php")
     fun useTry(@Body body: Map<String, String>): Call<UseTryResponse>
+
+    @FormUrlEncoded
+    @POST("change_password.php")
+    fun changePassword(
+        @Field("user_id") userId: Int,
+        @Field("new_password") newPass: String
+    ): Call<UpdateUserResponse>
 
     @FormUrlEncoded
     @POST("save_activity.php")

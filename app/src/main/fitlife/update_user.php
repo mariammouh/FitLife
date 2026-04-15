@@ -20,13 +20,29 @@ try {
         exit;
     }
 
-    $allowed = ['username', 'goal_weight_kg', 'goal', 'fitness_level'];
+    // List of fields that are allowed to be updated
+    $allowed = [
+        'full_name', 'username', 'email', 'phone', 'gender',
+        'dob', 'height', 'start_weight', 'current_weight',
+        'goal_weight', 'goal', 'fitness_level'
+    ];
+
+    // Map internal names to database column names if they differ
+    $map = [
+        'dob' => 'date_of_birth',
+        'height' => 'height_cm',
+        'start_weight' => 'start_weight_kg',
+        'current_weight' => 'current_weight_kg',
+        'goal_weight' => 'goal_weight_kg'
+    ];
+
     $sets    = [];
     $values  = [];
 
     foreach ($allowed as $field) {
-        if (isset($data[$field]) && $data[$field] !== '') {
-            $sets[]   = "$field = ?";
+        if (isset($data[$field])) {
+            $column = isset($map[$field]) ? $map[$field] : $field;
+            $sets[]   = "$column = ?";
             $values[] = $data[$field];
         }
     }
@@ -41,7 +57,7 @@ try {
     $stmt = $pdo->prepare($sql);
     $stmt->execute($values);
 
-    echo json_encode(["success" => true, "message" => "Updated successfully"]);
+    echo json_encode(["success" => true, "message" => "Profile updated successfully"]);
 
 } catch (PDOException $e) {
     echo json_encode(["success" => false, "message" => $e->getMessage()]);

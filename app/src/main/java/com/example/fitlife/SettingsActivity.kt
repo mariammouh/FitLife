@@ -1,5 +1,6 @@
 package com.example.fitlife
 
+import android.Manifest
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -7,21 +8,22 @@ import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,6 +33,16 @@ class SettingsActivity : AppCompatActivity() {
 
     private val PREFS = "fitlife_prefs"
     private var userId = 1
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Toast.makeText(this, "Notifications enabled", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,22 +59,23 @@ class SettingsActivity : AppCompatActivity() {
         prefs.edit().putInt("user_id", userId).apply()
 
         // ── Views ──
-        val btnBack        = findViewById<ImageButton>(R.id.btnBack)
-        val rowUsername    = findViewById<RelativeLayout>(R.id.rowUsername)
-        val rowWeightGoal  = findViewById<RelativeLayout>(R.id.rowWeightGoal)
-        val rowFitnessGoal = findViewById<RelativeLayout>(R.id.rowFitnessGoal)
-        val rowLanguage    = findViewById<RelativeLayout>(R.id.rowLanguage)
-        val tvUsername     = findViewById<TextView>(R.id.tvUsername)
-        val tvWeightGoal   = findViewById<TextView>(R.id.tvWeightGoal)
-        val tvFitnessGoal  = findViewById<TextView>(R.id.tvFitnessGoal)
-        val tvNbrTries     = findViewById<TextView>(R.id.tvNbrTries)
-        val switchReminder = findViewById<SwitchCompat>(R.id.switchReminder)
-        val tvReminderTime = findViewById<TextView>(R.id.tvReminderTime)
-        val rowTime        = findViewById<RelativeLayout>(R.id.rowReminderTime)
-        val rowMessage     = findViewById<RelativeLayout>(R.id.rowReminderMessage)
-        val rowTestNotif   = findViewById<RelativeLayout>(R.id.rowTestNotif)
-        val cardUpgrade    = findViewById<CardView>(R.id.cardUpgrade)
-        val rowLogout      = findViewById<RelativeLayout>(R.id.rowLogout)
+        val btnBack           = findViewById<ImageButton>(R.id.btnBack)
+        val rowChangePassword = findViewById<RelativeLayout>(R.id.rowChangePassword)
+        val rowUsername       = findViewById<RelativeLayout>(R.id.rowUsername)
+        val rowWeightGoal     = findViewById<RelativeLayout>(R.id.rowWeightGoal)
+        val rowFitnessGoal    = findViewById<RelativeLayout>(R.id.rowFitnessGoal)
+        val rowLanguage       = findViewById<RelativeLayout>(R.id.rowLanguage)
+        val tvUsername        = findViewById<TextView>(R.id.tvUsername)
+        val tvWeightGoal      = findViewById<TextView>(R.id.tvWeightGoal)
+        val tvFitnessGoal     = findViewById<TextView>(R.id.tvFitnessGoal)
+        val tvNbrTries        = findViewById<TextView>(R.id.tvNbrTries)
+        val switchReminder    = findViewById<SwitchCompat>(R.id.switchReminder)
+        val tvReminderTime    = findViewById<TextView>(R.id.tvReminderTime)
+        val rowTime           = findViewById<RelativeLayout>(R.id.rowReminderTime)
+        val rowMessage        = findViewById<RelativeLayout>(R.id.rowReminderMessage)
+        val rowTestNotif      = findViewById<RelativeLayout>(R.id.rowTestNotif)
+        val cardUpgrade       = findViewById<CardView>(R.id.cardUpgrade)
+        val rowLogout         = findViewById<RelativeLayout>(R.id.rowLogout)
 
         // ── Populate ──
         tvUsername?.text   = username
@@ -77,11 +90,12 @@ class SettingsActivity : AppCompatActivity() {
         tvReminderTime?.text      = savedTime
         switchReminder?.isChecked = savedEnabled
 
-        // ════════════════════════════════════════
-        // PERSONALISATION ROWS
-        // ════════════════════════════════════════
-
         btnBack?.setOnClickListener { finish() }
+
+        // Change Password
+        rowChangePassword?.setOnClickListener {
+            showChangePasswordDialog()
+        }
 
         // Edit Username
         rowUsername?.setOnClickListener {
@@ -158,10 +172,6 @@ class SettingsActivity : AppCompatActivity() {
                 .show()
         }
 
-        // ════════════════════════════════════════
-        // SUBSCRIPTION
-        // ════════════════════════════════════════
-
         cardUpgrade?.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Upgrade to Premium 🚀")
@@ -178,12 +188,18 @@ class SettingsActivity : AppCompatActivity() {
         // ════════════════════════════════════════
 
         switchReminder?.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean("reminder_enabled", isChecked).apply()
             if (isChecked) {
-                requestExactAlarmPermissionIfNeeded()
-                scheduleReminder(tvReminderTime?.text?.toString() ?: "08:00")
-                Toast.makeText(this, "Reminder set for ${tvReminderTime?.text} ✅", Toast.LENGTH_SHORT).show()
+                if (checkNotificationPermission()) {
+                    prefs.edit().putBoolean("reminder_enabled", true).apply()
+                    requestExactAlarmPermissionIfNeeded()
+                    scheduleReminder(tvReminderTime?.text?.toString() ?: "08:00")
+                    Toast.makeText(this, "Reminder set for ${tvReminderTime?.text} ✅", Toast.LENGTH_SHORT).show()
+                } else {
+                    switchReminder.isChecked = false
+                    requestNotificationPermission()
+                }
             } else {
+                prefs.edit().putBoolean("reminder_enabled", false).apply()
                 cancelReminder()
                 Toast.makeText(this, "Reminder disabled", Toast.LENGTH_SHORT).show()
             }
@@ -226,7 +242,11 @@ class SettingsActivity : AppCompatActivity() {
 
         // Test notification — fires immediately
         rowTestNotif?.setOnClickListener {
-            sendTestNotification(prefs)
+            if (checkNotificationPermission()) {
+                sendTestNotification(prefs)
+            } else {
+                requestNotificationPermission()
+            }
         }
 
         // ════════════════════════════════════════
@@ -249,37 +269,75 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    // ════════════════════════════════════════
-    // UPDATE USER FIELD via API
-    // ════════════════════════════════════════
+    private fun checkNotificationPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
+
+    private fun showChangePasswordDialog() {
+        val layout = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            setPadding(48, 24, 48, 24)
+        }
+        val etOld = EditText(this).apply {
+            hint = "Current Password"
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        val etNew = EditText(this).apply {
+            hint = "New Password"
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        layout.addView(etOld)
+        layout.addView(etNew)
+
+        AlertDialog.Builder(this)
+            .setTitle("Change Password")
+            .setView(layout)
+            .setPositiveButton("Update") { _, _ ->
+                val newPass = etNew.text.toString()
+                if (newPass.length < 6) {
+                    Toast.makeText(this, "New password too short", Toast.LENGTH_SHORT).show()
+                } else {
+                    RetrofitClient.instance.changePassword(userId, newPass).enqueue(object : Callback<UpdateUserResponse> {
+                        override fun onResponse(call: Call<UpdateUserResponse>, response: Response<UpdateUserResponse>) {
+                            Toast.makeText(this@SettingsActivity, "Password updated ✅", Toast.LENGTH_SHORT).show()
+                        }
+                        override fun onFailure(call: Call<UpdateUserResponse>, t: Throwable) {
+                            Toast.makeText(this@SettingsActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
     private fun updateUserField(field: String, value: String, onSuccess: () -> Unit) {
         val body = mapOf("user_id" to userId.toString(), field to value)
         RetrofitClient.instance.updateUser(body).enqueue(object : Callback<UpdateUserResponse> {
             override fun onResponse(call: Call<UpdateUserResponse>, response: Response<UpdateUserResponse>) {
                 if (response.body()?.success == true) {
-                    runOnUiThread {
-                        onSuccess()
-                        Toast.makeText(this@SettingsActivity, "Saved ✅", Toast.LENGTH_SHORT).show()
-                    }
+                    onSuccess()
+                    Toast.makeText(this@SettingsActivity, "Saved ✅", Toast.LENGTH_SHORT).show()
                 } else {
-                    runOnUiThread {
-                        Toast.makeText(this@SettingsActivity, "Save failed — check connection", Toast.LENGTH_SHORT).show()
-                    }
+                    Toast.makeText(this@SettingsActivity, "Save failed — check connection", Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<UpdateUserResponse>, t: Throwable) {
-                runOnUiThread {
-                    Toast.makeText(this@SettingsActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(this@SettingsActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    // ════════════════════════════════════════
-    // SCHEDULE DAILY REPEATING REMINDER
-    // The trick: ReminderReceiver reschedules itself
-    // for next day → reliable daily repeat
-    // ════════════════════════════════════════
     private fun scheduleReminder(time: String) {
         val parts  = time.split(":")
         val hour   = parts.getOrNull(0)?.toIntOrNull() ?: 8
@@ -290,7 +348,6 @@ class SettingsActivity : AppCompatActivity() {
             set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
-            // If time already passed today, schedule for tomorrow
             if (timeInMillis <= System.currentTimeMillis()) {
                 add(Calendar.DAY_OF_YEAR, 1)
             }
@@ -329,9 +386,6 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    // ════════════════════════════════════════
-    // TEST NOTIFICATION
-    // ════════════════════════════════════════
     private fun sendTestNotification(prefs: android.content.SharedPreferences) {
         val message   = prefs.getString("reminder_msg", "Time for your workout! 💪") ?: ""
         val channelId = "fitlife_reminder"
@@ -344,13 +398,6 @@ class SettingsActivity : AppCompatActivity() {
                 lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
             }
             manager.createNotificationChannel(channel)
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (!NotificationManagerCompat.from(this).areNotificationsEnabled()) {
-                Toast.makeText(this, "Please enable notifications in device settings", Toast.LENGTH_LONG).show()
-                return
-            }
         }
 
         val tapIntent = Intent(this, DashboardActivity::class.java).apply {

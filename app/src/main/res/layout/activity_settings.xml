@@ -41,7 +41,76 @@
         </RelativeLayout>
 
         <!-- ══════════════════════════════════════ -->
-        <!-- SECTION 1 — PERSONALISATION           -->
+        <!-- SECTION 1 — ACCOUNT SECURITY           -->
+        <!-- ══════════════════════════════════════ -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ACCOUNT SECURITY"
+            android:textColor="@color/purple_200"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.15"
+            android:paddingHorizontal="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            app:cardBackgroundColor="@color/card_dark"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Change Password -->
+                <RelativeLayout
+                    android:id="@+id/rowChangePassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:paddingHorizontal="16dp"
+                    android:background="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:id="@+id/icLock"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_password"
+                        app:tint="@color/purple_200" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/icLock"
+                        android:layout_marginStart="12dp"
+                        android:text="Change Password"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:tint="@color/text_secondary" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- SECTION 2 — PERSONALISATION           -->
         <!-- ══════════════════════════════════════ -->
 
         <TextView
@@ -53,7 +122,7 @@
             android:textStyle="bold"
             android:letterSpacing="0.15"
             android:paddingHorizontal="20dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp" />
 
         <androidx.cardview.widget.CardView
@@ -76,71 +145,49 @@
                     android:layout_height="56dp"
                     android:paddingHorizontal="16dp"
                     android:background="?attr/selectableItemBackground">
-
                     <ImageView
-                        android:id="@+id/icUsername"
+                        android:id="@+id/icUser"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_centerVertical="true"
                         android:src="@drawable/baseline_person_24"
                         app:tint="@color/purple_200" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_toEndOf="@id/icUsername"
+                        android:layout_toEndOf="@id/icUser"
                         android:layout_marginStart="12dp"
                         android:text="Username"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
-
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tvUsername"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:id="@+id/tvUsername"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="jane_doe"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp" />
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_marginStart="6dp"
-                            android:src="@drawable/ic_baseline_chevron_right_24"
-                            app:tint="@color/text_secondary" />
-
-                    </LinearLayout>
-
+                        android:text="User"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp" />
                 </RelativeLayout>
 
-                <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#2A2A3E" android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1AFFFFFF" android:layout_marginHorizontal="16dp" />
 
-                <!-- Weight Goal -->
+                <!-- Target Weight -->
                 <RelativeLayout
                     android:id="@+id/rowWeightGoal"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:paddingHorizontal="16dp"
                     android:background="?attr/selectableItemBackground">
-
                     <ImageView
                         android:id="@+id/icWeight"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_workouts"
+                        android:src="@drawable/ic_goals"
                         app:tint="@color/purple_200" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -150,36 +197,18 @@
                         android:text="Target Weight"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
-
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tvWeightGoal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:id="@+id/tvWeightGoal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="— kg"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp" />
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_marginStart="6dp"
-                            android:src="@drawable/ic_baseline_chevron_right_24"
-                            app:tint="@color/text_secondary" />
-
-                    </LinearLayout>
-
+                        android:text="— kg"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp" />
                 </RelativeLayout>
 
-                <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#2A2A3E" android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1AFFFFFF" android:layout_marginHorizontal="16dp" />
 
                 <!-- Fitness Goal -->
                 <RelativeLayout
@@ -188,15 +217,13 @@
                     android:layout_height="56dp"
                     android:paddingHorizontal="16dp"
                     android:background="?attr/selectableItemBackground">
-
                     <ImageView
                         android:id="@+id/icGoal"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_burned"
+                        android:src="@drawable/ic_workout"
                         app:tint="@color/purple_200" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -206,36 +233,18 @@
                         android:text="Fitness Goal"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
-
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tvFitnessGoal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:id="@+id/tvFitnessGoal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Lose Weight"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp" />
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_marginStart="6dp"
-                            android:src="@drawable/ic_baseline_chevron_right_24"
-                            app:tint="@color/text_secondary" />
-
-                    </LinearLayout>
-
+                        android:text="Lose Weight"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp" />
                 </RelativeLayout>
 
-                <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#2A2A3E" android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1AFFFFFF" android:layout_marginHorizontal="16dp" />
 
                 <!-- Language -->
                 <RelativeLayout
@@ -275,7 +284,7 @@
                             android:id="@+id/tvLanguage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Français"
+                            android:text="English"
                             android:textColor="@color/text_secondary"
                             android:textSize="14sp" />
 
@@ -295,7 +304,166 @@
         </androidx.cardview.widget.CardView>
 
         <!-- ══════════════════════════════════════ -->
-        <!-- SECTION 2 — PREMIUM UPGRADE           -->
+        <!-- SECTION 3 — NOTIFICATIONS             -->
+        <!-- ══════════════════════════════════════ -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NOTIFICATIONS"
+            android:textColor="@color/purple_200"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.15"
+            android:paddingHorizontal="20dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            app:cardBackgroundColor="@color/card_dark"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Daily Reminder Toggle -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:paddingHorizontal="16dp">
+                    <ImageView
+                        android:id="@+id/icNotif"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/baseline_notifications_24"
+                        app:tint="@color/purple_200" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/icNotif"
+                        android:layout_marginStart="12dp"
+                        android:text="Daily Reminder"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchReminder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1AFFFFFF" android:layout_marginHorizontal="16dp" />
+
+                <!-- Reminder Time -->
+                <RelativeLayout
+                    android:id="@+id/rowReminderTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:paddingHorizontal="16dp"
+                    android:background="?attr/selectableItemBackground">
+                    <ImageView
+                        android:id="@+id/icTime"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_time"
+                        app:tint="@color/purple_200" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/icTime"
+                        android:layout_marginStart="12dp"
+                        android:text="Reminder Time"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/tvReminderTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:text="08:00"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1AFFFFFF" android:layout_marginHorizontal="16dp" />
+
+                <!-- Reminder Message -->
+                <RelativeLayout
+                    android:id="@+id/rowReminderMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:paddingHorizontal="16dp"
+                    android:background="?attr/selectableItemBackground">
+                    <ImageView
+                        android:id="@+id/icMsg"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/baseline_info_24"
+                        app:tint="@color/purple_200" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/icMsg"
+                        android:layout_marginStart="12dp"
+                        android:text="Reminder Message"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_baseline_chevron_right_24"
+                        app:tint="@color/text_secondary" />
+                </RelativeLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1AFFFFFF" android:layout_marginHorizontal="16dp" />
+
+                <!-- Test Notification -->
+                <RelativeLayout
+                    android:id="@+id/rowTestNotif"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:paddingHorizontal="16dp"
+                    android:background="?attr/selectableItemBackground">
+                    <ImageView
+                        android:id="@+id/icTest"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/baseline_notifications_24"
+                        app:tint="@color/purple_200" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/icTest"
+                        android:layout_marginStart="12dp"
+                        android:text="Send Test Notification"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- SECTION 4 — SUBSCRIPTION              -->
         <!-- ══════════════════════════════════════ -->
 
         <TextView
@@ -310,7 +478,6 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp" />
 
-        <!-- Free trials remaining -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -357,7 +524,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Upgrade to Premium card -->
+        <!-- Upgrade Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardUpgrade"
             android:layout_width="match_parent"
@@ -374,15 +541,12 @@
                 android:orientation="vertical"
                 android:padding="18dp">
 
-                <!-- Header row -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:orientation="vertical">
                         <TextView
                             android:layout_width="wrap_content"
@@ -394,85 +558,25 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Unlock unlimited access"
+                            android:text="Unlock everything"
                             android:textColor="#9B6FF9"
-                            android:textSize="12sp"
-                            android:layout_marginTop="2dp" />
+                            android:textSize="12sp" />
                     </LinearLayout>
-
-                    <LinearLayout
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="€9.99"
-                            android:textColor="#FFFFFF"
-                            android:textSize="22sp"
-                            android:textStyle="bold" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="/mo"
-                            android:textColor="#7A7A9A"
-                            android:textSize="13sp"
-                            android:layout_marginStart="3dp" />
-                    </LinearLayout>
-
+                        android:text="€9.99/mo"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </RelativeLayout>
 
-                <!-- Divider -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="#2A2A3E"
-                    android:layout_marginVertical="14dp" />
-
-                <!-- Feature bullets -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="✦  Unlimited workout sessions"
-                    android:textColor="#CCCCCC"
-                    android:textSize="13sp" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="✦  Full statistics &amp; charts"
-                    android:textColor="#CCCCCC"
-                    android:textSize="13sp"
-                    android:layout_marginTop="6dp" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="✦  Advanced progress tracking"
-                    android:textColor="#CCCCCC"
-                    android:textSize="13sp"
-                    android:layout_marginTop="6dp" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="✦  Priority access to new features"
-                    android:textColor="#CCCCCC"
-                    android:textSize="13sp"
-                    android:layout_marginTop="6dp" />
-
-                <!-- Divider -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="#2A2A3E"
-                    android:layout_marginVertical="14dp" />
-
-                <!-- Upgrade button -->
                 <TextView
                     android:id="@+id/btnUpgradeNow"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:text="Upgrade Now"
                     android:textColor="#FFFFFF"
@@ -480,233 +584,7 @@
                     android:textStyle="bold"
                     android:background="@drawable/blue_border_white_back_rounded"
                     android:backgroundTint="@color/accent_purple" />
-
             </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- ══════════════════════════════════════ -->
-        <!-- SECTION 3 — DAILY REMINDER            -->
-        <!-- ══════════════════════════════════════ -->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DAILY REMINDER"
-            android:textColor="@color/purple_200"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.15"
-            android:paddingHorizontal="20dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp" />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            app:cardBackgroundColor="@color/card_dark"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <!-- Enable reminder toggle -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:paddingHorizontal="16dp">
-
-                    <ImageView
-                        android:id="@+id/icReminder"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/baseline_notifications_24"
-                        app:tint="@color/purple_200" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@id/icReminder"
-                        android:layout_marginStart="12dp"
-                        android:text="Enable reminder"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/switchReminder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:checked="true"
-                        app:thumbTint="@color/white"
-                        app:trackTint="@color/accent_purple" />
-
-                </RelativeLayout>
-
-                <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#2A2A3E" android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp" />
-
-                <!-- Time picker row -->
-                <RelativeLayout
-                    android:id="@+id/rowReminderTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:paddingHorizontal="16dp"
-                    android:background="?attr/selectableItemBackground">
-
-                    <ImageView
-                        android:id="@+id/icTime"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_time"
-                        app:tint="@color/purple_200" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@id/icTime"
-                        android:layout_marginStart="12dp"
-                        android:text="Reminder time"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:id="@+id/tvReminderTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="08:00"
-                            android:textColor="@color/purple_200"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_marginStart="6dp"
-                            android:src="@drawable/ic_baseline_chevron_right_24"
-                            app:tint="@color/text_secondary" />
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#2A2A3E" android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp" />
-
-                <!-- Reminder message -->
-                <RelativeLayout
-                    android:id="@+id/rowReminderMessage"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:paddingHorizontal="16dp"
-                    android:background="?attr/selectableItemBackground">
-
-                    <ImageView
-                        android:id="@+id/icMsg"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/baseline_notifications_24"
-                        app:tint="@color/purple_200" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@id/icMsg"
-                        android:layout_marginStart="12dp"
-                        android:text="Reminder message"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:id="@+id/tvReminderMsg"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Time for your workout!"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:maxWidth="140dp"
-                            android:ellipsize="end"
-                            android:singleLine="true" />
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_marginStart="6dp"
-                            android:src="@drawable/ic_baseline_chevron_right_24"
-                            app:tint="@color/text_secondary" />
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#2A2A3E" android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp" />
-
-                <!-- Test notification row -->
-                <RelativeLayout
-                    android:id="@+id/rowTestNotif"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:paddingHorizontal="16dp"
-                    android:background="?attr/selectableItemBackground">
-
-                    <ImageView
-                        android:id="@+id/icTestNotif"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/baseline_notifications_24"
-                        app:tint="#9B6FF9" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@id/icTestNotif"
-                        android:layout_marginStart="12dp"
-                        android:text="Send test notification"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_baseline_chevron_right_24"
-                        app:tint="@color/text_secondary" />
-
-                </RelativeLayout>
-
-            </LinearLayout>
-
         </androidx.cardview.widget.CardView>
 
         <!-- ── LOGOUT BUTTON ── -->
