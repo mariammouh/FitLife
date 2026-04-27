@@ -1,5 +1,6 @@
 package com.example.fitlife
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,8 +45,32 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Date Picker for DOB
+        binding.etDobSignUp.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            DatePickerDialog(this, { _, year, month, day ->
+                val date = String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, day)
+                binding.etDobSignUp.setText(date)
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
+        // Dropdowns
+        val genders = arrayOf("Male", "Female")
+        binding.etGenderSignUp.setAdapter(
+            ArrayAdapter(this, android.R.layout.simple_list_item_1, genders)
+        )
+
+        val goals = arrayOf("Lose Weight", "Build Muscle", "Maintain", "Improve Endurance")
+        binding.etGoalSignUp.setAdapter(
+            ArrayAdapter(this, android.R.layout.simple_list_item_1, goals)
+        )
+
+        val levels = arrayOf("Beginner", "Intermediate", "Advanced")
+        binding.etFitnessLevelSignUp.setAdapter(
+            ArrayAdapter(this, android.R.layout.simple_list_item_1, levels)
+        )
+
         binding.btnSignUp.setOnClickListener {
-            val name = binding.etFullName.text.toString()
             val username = binding.etUsernameSignUp.text.toString()
             val email = binding.etEmailSignUp.text.toString()
             val pass = binding.etPasswordSignUp.text.toString()
@@ -53,15 +79,15 @@ class MainActivity : AppCompatActivity() {
             val gender = binding.etGenderSignUp.text.toString()
             val height = binding.etHeight.text.toString()
             val startWeight = binding.etWeight.text.toString()
-            val currWeight = binding.etCurrentWeightSignUp.text.toString()
             val goalWeight = binding.etGoalWeightSignUp.text.toString()
             val goal = binding.etGoalSignUp.text.toString()
             val level = binding.etFitnessLevelSignUp.text.toString()
 
-            if (name.isNotEmpty() && email.isNotEmpty() && pass.isNotEmpty() && username.isNotEmpty()) {
-                registerOnServer(name, username, email, pass, phone, gender, dob, height, startWeight, currWeight, goalWeight, goal, level)
+            if (email.isNotEmpty() && pass.isNotEmpty() && username.isNotEmpty()) {
+                // fullName is empty, and currentWeight is set to startWeight initially
+                registerOnServer("", username, email, pass, phone, gender, dob, height, startWeight, startWeight, goalWeight, goal, level)
             } else {
-                Toast.makeText(this, "Missing required fields (Name, Username, Email, Password)", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Missing required fields (Username, Email, Password)", Toast.LENGTH_SHORT).show()
             }
         }
     }

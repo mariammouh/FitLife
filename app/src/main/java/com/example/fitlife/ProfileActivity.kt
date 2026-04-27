@@ -3,13 +3,14 @@ package com.example.fitlife
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.fitlife.databinding.ActivityProfileBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Calendar
+import java.util.*
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -41,14 +42,19 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupDropdowns() {
+        // Gender (Only Male and Female)
+        val genders = arrayOf("Male", "Female")
+        val genderAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, genders)
+        binding.etProfileGender.setAdapter(genderAdapter)
+
         // Goal
-        val goals = arrayOf("lose_weight", "build_muscle", "maintain", "improve_endurance")
-        val goalAdapter = ArrayAdapter(this, R.layout.spinner_item_dark, goals)
+        val goals = arrayOf("Lose Weight", "Build Muscle", "Maintain", "Improve Endurance")
+        val goalAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, goals)
         binding.etProfileGoal.setAdapter(goalAdapter)
 
         // Fitness Level
-        val levels = arrayOf("beginner", "intermediate", "advanced")
-        val levelAdapter = ArrayAdapter(this, R.layout.spinner_item_dark, levels)
+        val levels = arrayOf("Beginner", "Intermediate", "Advanced")
+        val levelAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, levels)
         binding.etProfileFitnessLevel.setAdapter(levelAdapter)
     }
 
@@ -60,7 +66,7 @@ class ProfileActivity : AppCompatActivity() {
             val day = calendar.get(Calendar.DAY_OF_MONTH)
 
             DatePickerDialog(this, { _, y, m, d ->
-                val date = String.format("%d-%02d-%02d", y, m + 1, d)
+                val date = String.format(Locale.US, "%d-%02d-%02d", y, m + 1, d)
                 binding.etProfileDob.setText(date)
             }, year, month, day).show()
         }
@@ -70,11 +76,11 @@ class ProfileActivity : AppCompatActivity() {
         RetrofitClient.instance.getUser(userId).enqueue(object : Callback<UserResponse> {
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 val user = response.body()?.user ?: return
-                binding.etProfileFullName.setText(user.full_name)
                 binding.etProfileUsername.setText(user.username)
                 binding.etProfileEmail.setText(user.email)
                 binding.etProfilePhone.setText(user.phone)
                 binding.etProfileDob.setText(user.date_of_birth)
+                binding.etProfileGender.setText(user.gender, false)
                 binding.etProfileHeight.setText(user.height_cm)
                 binding.etProfileStartWeight.setText(user.start_weight_kg)
                 binding.etProfileCurrentWeight.setText(user.current_weight_kg)
@@ -92,11 +98,11 @@ class ProfileActivity : AppCompatActivity() {
     private fun saveProfileData() {
         val updates = mapOf(
             "user_id" to userId.toString(),
-            "full_name" to binding.etProfileFullName.text.toString(),
             "username" to binding.etProfileUsername.text.toString(),
             "email" to binding.etProfileEmail.text.toString(),
             "phone" to binding.etProfilePhone.text.toString(),
             "dob" to binding.etProfileDob.text.toString(),
+            "gender" to binding.etProfileGender.text.toString(),
             "height" to binding.etProfileHeight.text.toString(),
             "start_weight" to binding.etProfileStartWeight.text.toString(),
             "current_weight" to binding.etProfileCurrentWeight.text.toString(),

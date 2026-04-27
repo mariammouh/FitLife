@@ -105,6 +105,7 @@ class DashboardActivity : AppCompatActivity() {
                     // Logic fix: Only consume try (and potentially lock) if NOT paying
                     if (user.is_paying == 1) {
                         findViewById<View>(R.id.layoutLocked)?.visibility = View.GONE
+                        findViewById<View>(R.id.dashboardContent)?.visibility = View.VISIBLE
                     } else {
                         consumeTry(userId)
                     }
@@ -151,6 +152,7 @@ class DashboardActivity : AppCompatActivity() {
                     lockDashboard()
                 } else {
                     findViewById<View>(R.id.layoutLocked)?.visibility = View.GONE
+                    findViewById<View>(R.id.dashboardContent)?.visibility = View.VISIBLE
                 }
             }
             override fun onFailure(call: Call<UseTryResponse>, t: Throwable) {}
@@ -159,6 +161,7 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun lockDashboard() {
         findViewById<View>(R.id.layoutLocked)?.visibility = View.VISIBLE
+        findViewById<View>(R.id.dashboardContent)?.visibility = View.GONE
     }
 
     private fun loadDashboardStats(userId: Int) {
