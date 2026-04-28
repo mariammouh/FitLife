@@ -147,7 +147,7 @@ class EditActivityFormActivity : AppCompatActivity() {
 
     private fun updateActivity() {
         if (activityId.isEmpty()) {
-            Toast.makeText(this, "Activity ID introuvable", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Activity ID not found", Toast.LENGTH_LONG).show()
             return
         }
 
@@ -157,43 +157,23 @@ class EditActivityFormActivity : AppCompatActivity() {
             return
         }
 
-        if (actType.text.toString().trim().isEmpty()) {
-            actType.error = "Required"
-            actType.requestFocus()
-            return
-        }
-
-        if (etDuration.text.toString().trim().isEmpty()) {
-            etDuration.error = "Required"
-            etDuration.requestFocus()
-            return
-        }
-
-        val url = "http://10.0.2.2/fitlife/update_activity.php"
+        // Consistent with RetrofitClient.BASE_URL
+        val url = "http://192.168.0.102/fitlife/update_activity.php"
 
         val request = object : StringRequest(
             Request.Method.POST,
             url,
             { response ->
                 val result = response.trim()
-
-                if (result.equals("success", ignoreCase = true)) {
-                    Toast.makeText(
-                        this,
-                        "Modification enregistrée avec succès",
-                        Toast.LENGTH_LONG
-                    ).show()
-
-                    val intent = Intent(this, ActivitiesListActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    startActivity(intent)
+                if (result.contains("success", ignoreCase = true)) {
+                    Toast.makeText(this, "Activity Updated!", Toast.LENGTH_SHORT).show()
                     finish()
                 } else {
-                    Toast.makeText(this, "Échec de modification : $result", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Update Failed: $result", Toast.LENGTH_LONG).show()
                 }
             },
             { error ->
-                Toast.makeText(this, "Erreur réseau : ${error.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Network Error: ${error.message}", Toast.LENGTH_LONG).show()
             }
         ) {
             override fun getParams(): MutableMap<String, String> {

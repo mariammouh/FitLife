@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_dark">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -25,7 +25,6 @@
                 android:titleTextColor="@color/text_white"
                 android:background="@android:color/transparent" />
 
-            <!-- Banner inserted from Add Activity -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="265dp"
@@ -37,20 +36,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <!-- background image -->
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
                         android:src="@drawable/fitness_banner" />
 
-                    <!-- violet overlay -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_banner_overlay" />
 
-                    <!-- content -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -182,6 +178,6 @@
                 android:layout_marginTop="10dp"
                 android:nestedScrollingEnabled="false"/>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
